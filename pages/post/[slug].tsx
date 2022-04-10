@@ -1,5 +1,6 @@
 import { url } from "inspector";
 import { GetStaticProps } from "next";
+import PortableText from "react-portable-text";
 import Header from "../../Components/header";
 import { sanityClient, urlFor } from "../../sanity";
 import { Post } from '../../typings'
@@ -9,7 +10,6 @@ interface Props {
 }
 
 export default function PostPage({ post }: Props) {
-  console.log(post);
   return <main>
     <Header />
     {/* Banner */}
@@ -20,14 +20,37 @@ export default function PostPage({ post }: Props) {
       />
     </div>
     {/* Article */}
-    <article className="px-10">
+    <article className="px-10 max-w-7xl mx-auto">
       <h1 className="text-3xl mt-5 mb-3">{post.title}</h1>
       <h2 className="text-xl font-light text-gray-500 mb-2">{post.description}</h2>
       <div className="flex items-center gap-2">
         <img className="h-12 w-12 rounded-full" src={urlFor(post.author.image).url()} />
         <p className="font-extralight text-sm">Blog post by <span className="text-green-500">{post.author.name}</span> - Published at {new Date(post._createdAt).toLocaleString()}</p>
       </div>
-
+      <div className="mt-10">
+        <PortableText
+          dataset={process.env.NEXT_PUBLIC_SANITY_DATASET}
+          projectId={process.env.NEXT_PUBLIC_SANITY_PROJECT_ID}
+          content={post.body}
+          serializers={
+            {
+              h1: (props: any) => (
+                <h1 className="text-2xl font-bold my-5" {...props} />
+              ),
+              h2: (props: any) => (
+                <h2 className="text-xl font-bold my-5" {...props} />
+              ),
+              li: ({ children }: any) => (
+                <li className="ml-4 list-disc"> {children} </li>
+              ),
+              link: ({ href, children }: any) => (
+                <a href={href} className="text-blue-500 hover:underline">
+                  {children}
+                </a>
+              ),
+            }
+          } />
+      </div>
     </article>
   </main>
 }
