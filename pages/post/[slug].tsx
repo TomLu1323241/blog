@@ -3,7 +3,8 @@ import { GetStaticProps } from "next";
 import PortableText from "react-portable-text";
 import Header from "../../Components/header";
 import { sanityClient, urlFor } from "../../sanity";
-import { Post } from '../../typings'
+import { Post } from '../../typings';
+import { useForm, SubmitHandler } from 'react-hook-form';
 
 interface Props {
   post: Post;
@@ -48,10 +49,32 @@ export default function PostPage({ post }: Props) {
                   {children}
                 </a>
               ),
+              image: (props: any) => (
+                <img className="mx-auto" src={urlFor(props.asset).url()} />
+              )
             }
           } />
       </div>
     </article>
+    <hr className="max-w-4xl my-5 mx-auto border border-yellow-500" />
+    <form className="flex flex-col p-5 max-w-2xl mx-auto mb-10">
+      <h3 className="text-sm text-yellow-500">Enjoy this article?</h3>
+      <h3 className="text-3xl font-bold">Leave a comment!</h3>
+      <hr className="max-w-4xl mx-auto border border-yellow-500" />
+      <hr className="max-w-4xl mt-2" />
+      <label className="block mb-5">
+        <span className="text-gray-700">Name</span>
+        <input className="shadow border rounded py-2 px-3 form-input mt-1 block w-full ring-yellow-500 outline-none focus:ring" placeholder="Tom Lu" type="text" />
+      </label>
+      <label className="block mb-5">
+        <span className="text-gray-700">Email</span>
+        <input className="shadow border rounded py-2 px-3 form-input mt-1 block w-full ring-yellow-500 outline-none focus:ring" placeholder="example@example.com" type="text" />
+      </label>
+      <label className="block mb-5">
+        <span className="text-gray-700">Comment</span>
+        <textarea className="shadow border rounded py-2 px-3 form-textarea mt-1 block w-full ring-yellow-500 outline-none focus:ring" placeholder="Comment" rows={8} />
+      </label>
+    </form>
   </main>
 }
 
