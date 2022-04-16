@@ -18,8 +18,6 @@ export default function PostPage({ post }: Props) {
     formState: { errors },
   } = useForm<BlogComment>();
 
-  console.log(post);
-
   const [submitted, setSubmitted] = useState(false);
 
   const onSummit: SubmitHandler<BlogComment> = async (data: BlogComment) => {
@@ -81,8 +79,9 @@ export default function PostPage({ post }: Props) {
           } />
       </div>
     </article>
-    <hr className="max-w-4xl my-5 mx-auto border border-yellow-500" />
+    <hr className="max-w-2xl my-5 mx-auto border border-yellow-500" />
 
+    {/* comment section */}
     {submitted ? (
       <div className="flex flex-col p-10 my-10 bg-yellow-500 text-white max-w-2xl mx-auto">
         <h3 className="text-2xl font-bold">
@@ -95,7 +94,7 @@ export default function PostPage({ post }: Props) {
     ) : (
       <form
         onSubmit={handleSubmit(onSummit)}
-        className="flex flex-col p-5 max-w-2xl mx-auto mb-10"
+        className="flex flex-col p-5 max-w-2xl mx-auto"
       >
         <h3 className="text-sm text-yellow-500">Enjoy this article?</h3>
         <h3 className="text-3xl font-bold">Leave a comment!</h3>
@@ -144,7 +143,23 @@ export default function PostPage({ post }: Props) {
         <input type='submit' className="shadow bg-yellow-500 hover:bg-yellow-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded cursor-pointer" />
       </form>
     )}
+    <div className="mx-auto max-w-2xl shadow-sm shadow-yellow-500 p-12 mb-5">
 
+      <h3 className="mx-auto max-w-2xl text-3xl font-bold">Comments</h3>
+      <hr className="pb-2" />
+      <div className="flex flex-row mx-auto max-w-2xl gap-1">
+        <div className="flex flex-col">
+          {post.comment.map((current, index) => (
+            <p key={`${current.author}-${index}`} className="text-yellow-600 text-bold">{current.author}</p>
+          ))}
+        </div>
+        <div className="flex flex-col">
+          {post.comment.map((current, index) => (
+            <p key={`${current.comment}-${index}`}> <span className="text-yellow-600 text-bold">|</span> {current.comment}</p>
+          ))}
+        </div>
+      </div>
+    </div>
 
   </main>
 }
