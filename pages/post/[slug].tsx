@@ -3,14 +3,39 @@ import { GetStaticProps } from "next";
 import PortableText from "react-portable-text";
 import Header from "../../Components/header";
 import { sanityClient, urlFor } from "../../sanity";
-import { Post } from '../../typings';
+import { BlogComment, Post } from '../../typings';
 import { useForm, SubmitHandler } from 'react-hook-form';
+import { useState } from "react";
 
 interface Props {
   post: Post;
 }
 
 export default function PostPage({ post }: Props) {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<BlogComment>();
+
+  console.log(post);
+
+  const [submitted, setSubmitted] = useState(false);
+
+  const onSummit: SubmitHandler<BlogComment> = async (data: BlogComment) => {
+    const res = await fetch('/api/createComment', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+    if (res.ok) {
+      console.log('submitted comment');
+      setSubmitted(true);
+    } else {
+      console.log(`${res.status} : ${res.statusText}`);
+      setSubmitted(false);
+    }
+  };
+
   return <main>
     <Header />
     {/* Banner */}
@@ -57,24 +82,70 @@ export default function PostPage({ post }: Props) {
       </div>
     </article>
     <hr className="max-w-4xl my-5 mx-auto border border-yellow-500" />
-    <form className="flex flex-col p-5 max-w-2xl mx-auto mb-10">
-      <h3 className="text-sm text-yellow-500">Enjoy this article?</h3>
-      <h3 className="text-3xl font-bold">Leave a comment!</h3>
-      <hr className="max-w-4xl mx-auto border border-yellow-500" />
-      <hr className="max-w-4xl mt-2" />
-      <label className="block mb-5">
-        <span className="text-gray-700">Name</span>
-        <input className="shadow border rounded py-2 px-3 form-input mt-1 block w-full ring-yellow-500 outline-none focus:ring" placeholder="Tom Lu" type="text" />
-      </label>
-      <label className="block mb-5">
-        <span className="text-gray-700">Email</span>
-        <input className="shadow border rounded py-2 px-3 form-input mt-1 block w-full ring-yellow-500 outline-none focus:ring" placeholder="example@example.com" type="text" />
-      </label>
-      <label className="block mb-5">
-        <span className="text-gray-700">Comment</span>
-        <textarea className="shadow border rounded py-2 px-3 form-textarea mt-1 block w-full ring-yellow-500 outline-none focus:ring" placeholder="Comment" rows={8} />
-      </label>
-    </form>
+
+    {submitted ? (
+      <div className="flex flex-col p-10 my-10 bg-yellow-500 text-white max-w-2xl mx-auto">
+        <h3 className="text-2xl font-bold">
+          Thank you for submitting your comment!
+        </h3>
+        <p>
+          Once it has been approved, it will appear below!
+        </p>
+      </div>
+    ) : (
+      <form
+        onSubmit={handleSubmit(onSummit)}
+        className="flex flex-col p-5 max-w-2xl mx-auto mb-10"
+      >
+        <h3 className="text-sm text-yellow-500">Enjoy this article?</h3>
+        <h3 className="text-3xl font-bold">Leave a comment!</h3>
+        <hr className="max-w-4xl mx-auto border border-yellow-500" />
+        <hr className="max-w-4xl mt-2" />
+
+        <input
+          {...register('_id')}
+          type='hidden'
+          name='_id'
+          value={post._id}
+        />
+
+        <label className="block mb-5">
+          <span className="text-gray-700">Name</span>
+          <input
+            {...register('author', { required: true })}
+            className="shadow border rounded py-2 px-3 form-input mt-1 block w-full ring-yellow-500 outline-none focus:ring" placeholder="Tom Lu"
+            type="text" />
+        </label>
+        <label className="block mb-5">
+          <span className="text-gray-700">Email</span>
+          <input
+            {...register('email', { required: true })}
+            className="shadow border rounded py-2 px-3 form-input mt-1 block w-full ring-yellow-500 outline-none focus:ring" placeholder="example@example.com"
+            type="email" />
+        </label>
+        <label className="block mb-5">
+          <span className="text-gray-700">Comment</span>
+          <textarea
+            {...register('comment', { required: true })}
+            className="shadow border rounded py-2 px-3 form-textarea mt-1 block w-full ring-yellow-500 outline-none focus:ring" placeholder="Comment"
+            rows={8} />
+        </label>
+        <div className="flex flex-col p-5">
+          {errors.author && (
+            <span className="text-red-500">- The Name field is required</span>
+          )}
+          {errors.email && (
+            <span className="text-red-500">- The Email field is required</span>
+          )}
+          {errors.comment && (
+            <span className="text-red-500">- The Comment field is required</span>
+          )}
+        </div>
+        <input type='submit' className="shadow bg-yellow-500 hover:bg-yellow-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded cursor-pointer" />
+      </form>
+    )}
+
+
   </main>
 }
 
@@ -103,21 +174,28 @@ export const getStaticPaths = async () => {
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   const query = `
-    *[_type == "post" && slug.current == $slug][0] {
-      _id,
-      _createdAt,
-      title,
-      author -> {
-        name,
-        image
-      },
-      description,
-      mainImage,
-      body,
-      slug {
-        current
-      }
+  *[_type == "post" && 
+    slug.current == $slug][0] {
+    _id,
+    _createdAt,
+    title,
+    author -> {
+      name,
+      image
+    },
+    'comment': *[_type == "comment" &&
+                post._ref == ^._id &&
+                approved == true] {
+                  author,
+                  comment,
+                },
+    description,
+    mainImage,
+    body,
+    slug {
+      current
     }
+  }
   `;
   const post = await sanityClient.fetch(query, {
     slug: params?.slug,

@@ -6,12 +6,6 @@ import Header from '../Components/header'
 import { sanityClient, urlFor } from '../sanity'
 import { Post } from '../typings'
 
-interface IFormInput {
-  _id: string;
-  name: string;
-  email: string;
-  comment: string;
-}
 
 interface Props {
   posts: Post[];
