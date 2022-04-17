@@ -1,7 +1,7 @@
 import { url } from "inspector";
 import { GetStaticProps } from "next";
 import PortableText from "react-portable-text";
-import Header from "../../Components/header";
+import Header from "../../components/header";
 import { sanityClient, urlFor } from "../../sanity";
 import { BlogComment, Post } from '../../typings';
 import { useForm, SubmitHandler } from 'react-hook-form';
@@ -58,14 +58,17 @@ export default function PostPage({ post }: Props) {
           content={post.body}
           serializers={
             {
+              normal: (props: any) => (
+                <p className="text-xl my-5" {...props} />
+              ),
               h1: (props: any) => (
-                <h1 className="text-2xl font-bold my-5" {...props} />
+                <h1 className="text-4xl font-bold my-5" {...props} />
               ),
               h2: (props: any) => (
-                <h2 className="text-xl font-bold my-5" {...props} />
+                <h2 className="text-2xl font-bold my-5" {...props} />
               ),
               li: ({ children }: any) => (
-                <li className="ml-4 list-disc"> {children} </li>
+                <li className="ml-16 list-disc"> {children} </li>
               ),
               link: ({ href, children }: any) => (
                 <a href={href} className="text-blue-500 hover:underline">
@@ -73,7 +76,7 @@ export default function PostPage({ post }: Props) {
                 </a>
               ),
               image: (props: any) => (
-                <img className="mx-auto" src={urlFor(props.asset).url()} />
+                <img className="w-full h-[32rem] object-contain py-5" src={urlFor(props.asset).url()} />
               )
             }
           } />
