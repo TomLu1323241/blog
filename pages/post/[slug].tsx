@@ -81,7 +81,7 @@ export default function PostPage({ post }: Props) {
                 </a>
               ),
               image: (props: any) => (
-                <img className="w-full h-[32rem] object-contain py-5" src={urlFor(props.asset).url()} />
+                <img className="w-full max-h-[32rem] object-contain py-5" src={urlFor(props.asset).url()} />
               ),
               blockquote: (props: any) => (
                 <div className="max-w-fit mt-8 mx-auto bg-grey-light rounded-lg shadow-md p-8">
