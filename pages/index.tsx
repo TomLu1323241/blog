@@ -47,6 +47,9 @@ export default function Home({ posts }: Props) {
                 <div>
                   <p className='text-lg font-bold'>{post.title}</p>
                   <p className='text-xs'>{post.description}</p>
+                  <p className='text-xs text-gray-400'>{new Date(post._createdAt).toLocaleString('en-US', {
+                    weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+                  })}</p>
                 </div>
                 <img className='h-12 w-12 rounded-full' src={urlFor(post.author.image).url()!} />
               </div>
@@ -60,7 +63,7 @@ export default function Home({ posts }: Props) {
 
 export const getServerSideProps = async () => {
   const query = `
-  *[_type == "post"] {
+  *[_type == "post"] | order(_createdAt desc){
     _id,
     _createdAt,
     title,

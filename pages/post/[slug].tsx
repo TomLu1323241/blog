@@ -6,6 +6,7 @@ import { sanityClient, urlFor } from "../../sanity";
 import { BlogComment, Post } from '../../typings';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { useState } from "react";
+import Head from "next/head";
 
 interface Props {
   post: Post;
@@ -35,6 +36,10 @@ export default function PostPage({ post }: Props) {
   };
 
   return <main>
+    <Head>
+      <title>{post.title}</title>
+      <link rel="icon" href="/favicon.ico" />
+    </Head>
     <Header />
     {/* Banner */}
     <div className="flex items-center max-w-7xl mx-auto p-5">
@@ -77,6 +82,16 @@ export default function PostPage({ post }: Props) {
               ),
               image: (props: any) => (
                 <img className="w-full h-[32rem] object-contain py-5" src={urlFor(props.asset).url()} />
+              ),
+              blockquote: (props: any) => (
+                <div className="w-min mt-8 mx-auto bg-grey-light rounded-lg shadow-md p-8">
+                  <h2 className="w-max italic text-right text-blue-darkest leading-normal">
+                    {props.children[0].split('-')[0].trim()}
+                  </h2>
+                  <p className="text-right pt-2 pr-6 text-gray-400">
+                    - {props.children[0].split('-')[1].trim()}
+                  </p>
+                </div>
               )
             }
           } />
@@ -171,6 +186,7 @@ export const getStaticPaths = async () => {
   const query = `
   *[_type == "post"] {
     _id,
+    _createdAt,
     slug {
       current
     }
