@@ -64,7 +64,7 @@ export default function PostPage({ post }: Props) {
           serializers={
             {
               normal: (props: any) => (
-                <p className="text-xl my-5" {...props} />
+                <p className="text-xl my-5 break-words" {...props} />
               ),
               h1: (props: any) => (
                 <h1 className="text-4xl font-bold my-5" {...props} />
