@@ -84,7 +84,7 @@ export default function PostPage({ post }: Props) {
                 <img className="w-full max-h-[32rem] object-contain py-5" src={urlFor(props.asset).url()} />
               ),
               blockquote: (props: any) => (
-                <div className="max-w-fit mt-8 mx-auto bg-grey-light rounded-lg shadow-md p-8">
+                <div className="max-w-fit mx-auto bg-grey-light rounded-lg shadow-md p-8 border">
                   <h2 className="max-w-max italic text-right text-blue-darkest leading-normal">
                     {props.children[0].split('-')[0].trim()}
                   </h2>
