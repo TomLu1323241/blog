@@ -38,7 +38,7 @@ export default function PostPage({ post }: Props) {
   return <main>
     <Head>
       <title>{post.title}</title>
-      <link rel="icon" href="/favicon.ico" />
+      <link rel="icon" href="/logo.png" />
     </Head>
     <Header />
     {/* Banner */}
@@ -88,9 +88,15 @@ export default function PostPage({ post }: Props) {
                   <h2 className="max-w-max italic text-right text-blue-darkest leading-normal">
                     {props.children[0].split('-')[0].trim()}
                   </h2>
-                  <p className="text-right pt-2 pr-6 text-gray-400">
-                    - {props.children[0].split('-')[1].trim()}
-                  </p>
+                  {props.children[0].split('-')[1] ? (
+                    <p className="text-right pt-2 pr-6 text-gray-400">
+                      - {props.children[0].split('-')[1].trim()}
+                    </p>
+                  ) : (
+                    <p className="text-right pt-2 pr-6 text-gray-400">
+                      - anonymous
+                    </p>
+                  )}
                 </div>
               )
             }
