@@ -177,12 +177,17 @@ export default function PostPage({ post }: Props) {
       <div className="flex flex-row mx-auto max-w-2xl gap-1">
         <div className="flex flex-col">
           {post.comment.map((current, index) => (
-            <p key={`${current.author}-${index}`} className="text-yellow-600 text-bold">{current.author}</p>
+            <p key={`${current.author}-${index}`} className="text-yellow-600 text-bold whitespace-nowrap">{current.author}</p>
           ))}
         </div>
         <div className="flex flex-col">
           {post.comment.map((current, index) => (
-            <p key={`${current.comment}-${index}`}> <span className="text-yellow-600 text-bold">|</span> {current.comment}</p>
+            <p key={`${current.comment}-${index}|`}> <span className="text-yellow-600 text-bold">|</span></p>
+          ))}
+        </div>
+        <div className="flex flex-col">
+          {post.comment.map((current, index) => (
+            <p key={`${current.comment}-${index}`}>{current.comment}</p>
           ))}
         </div>
       </div>
