@@ -39,6 +39,9 @@ export default function PostPage({ post }: Props) {
     <Head>
       <title>{post.title}</title>
       <link rel="icon" href="/logo.png" />
+      <meta property="og:title" content={post.title} />
+      <meta property="og:image" content={urlFor(post.mainImage).url()} />
+      <meta property="og:description" content={post.description} />
     </Head>
     <Header />
     {/* Banner */}
@@ -64,7 +67,7 @@ export default function PostPage({ post }: Props) {
           serializers={
             {
               normal: (props: any) => (
-                <p className="text-xl my-5 break-words" {...props} />
+                <p className="text-xl my-5 break-words indent-8" {...props} />
               ),
               h1: (props: any) => (
                 <h1 className="text-4xl font-bold my-5" {...props} />
