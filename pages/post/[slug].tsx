@@ -193,7 +193,7 @@ export default function PostPage({ post }: Props) {
       </div>
     </div>
 
-  </main>
+  </main>;
 }
 
 export const getStaticPaths = async () => {
@@ -217,8 +217,8 @@ export const getStaticPaths = async () => {
   return {
     paths,
     fallback: 'blocking',
-  }
-}
+  };
+};
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   const query = `
@@ -252,7 +252,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   if (!post) {
     return {
       notFound: true,
-    }
+    };
   }
   return {
     props: {
@@ -260,4 +260,4 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     },
     revalidate: 60,
   };
-}
+};

@@ -1,10 +1,10 @@
-import type { NextPage } from 'next'
-import Head from 'next/head'
-import Image from 'next/image'
-import Link from 'next/link'
-import Header from '../components/header'
-import { sanityClient, urlFor } from '../sanity'
-import { Post } from '../typings'
+import type { NextPage } from 'next';
+import Head from 'next/head';
+import Image from 'next/image';
+import Link from 'next/link';
+import Header from '../components/header';
+import { sanityClient, urlFor } from '../sanity';
+import { Post } from '../typings';
 
 
 interface Props {
@@ -60,7 +60,7 @@ export default function Home({ posts }: Props) {
         ))}
       </div>
     </div>
-  )
+  );
 }
 
 export const getServerSideProps = async () => {
@@ -84,4 +84,4 @@ export const getServerSideProps = async () => {
       posts,
     }
   };
-}
+};

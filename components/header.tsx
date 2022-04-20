@@ -1,11 +1,11 @@
-import Link from "next/link"
+import Link from "next/link";
 
 function Header() {
   return (
     <header className="flex justify-between p-5 max-w-7xl mx-auto">
 
       <div className="flex items-center space-x-5">
-        <Link href='/'>
+        <Link href='/' passHref>
           <img
             className="w-44 object-contain cursor-pointer"
             src="/logo long.png"
@@ -25,7 +25,7 @@ function Header() {
       </div>
 
     </header>
-  )
+  );
 }
 
 export default Header;

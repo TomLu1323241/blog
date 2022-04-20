@@ -23,7 +23,7 @@ export default function createComment(
     author: body.author,
     email: body.email,
     comment: body.comment,
-  })
+  });
   console.log(body);
-  res.status(200).json({ name: 'John Doe' })
+  res.status(200).json({ name: 'John Doe' });
 }
