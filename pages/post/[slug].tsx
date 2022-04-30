@@ -7,6 +7,8 @@ import { BlogComment, Post } from '../../typings';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { useState } from 'react';
 import Head from 'next/head';
+import Highlight from 'react-highlight';
+import 'highlight.js/styles/an-old-hope.css';
 
 interface Props {
   post: Post;
@@ -18,9 +20,7 @@ export default function PostPage({ post }: Props) {
     handleSubmit,
     formState: { errors },
   } = useForm<BlogComment>();
-
   const [submitted, setSubmitted] = useState(false);
-
   const onSummit: SubmitHandler<BlogComment> = async (data: BlogComment) => {
     const res = await fetch('/api/createComment', {
       method: 'POST',
@@ -34,6 +34,21 @@ export default function PostPage({ post }: Props) {
       setSubmitted(false);
     }
   };
+
+  post.body.forEach((item: any) => {
+    if (item?._type === 'code') {
+      item._type = 'block';
+      let code = item.code;
+      let lang = item.language;
+      item.children = [
+        {
+          text: code,
+          lang: lang,
+        }
+      ];
+      item.style = 'customCode';
+    }
+  });
 
   return <main>
     <Head>
@@ -52,7 +67,7 @@ export default function PostPage({ post }: Props) {
       />
     </div>
     {/* Article */}
-    <article className='px-10 max-w-7xl mx-auto'>
+    <article className='px-5 md:px-10 max-w-7xl mx-auto'>
       <h1 className='text-3xl mt-5 mb-3'>{post.title}</h1>
       <h2 className='text-xl font-light text-gray-500 mb-2'>{post.description}</h2>
       <div className='flex items-center gap-2'>
@@ -66,6 +81,14 @@ export default function PostPage({ post }: Props) {
           content={post.body}
           serializers={
             {
+              customCode: (props: any) => {
+                console.log(props);
+                return (
+                  <div className='overflow-x-auto rounded-xl shadow-md border mx-auto max-w-4xl'>
+                    <Highlight className={`language-${props.children[0].props.node.lang} min-w-fit`}>{props.children[0].props.node.text}</Highlight>
+                  </div>
+                );
+              },
               normal: (props: any) => {
                 return (
                   <p className='text-xl my-5 break-words indent-8' {...props} />
@@ -115,7 +138,7 @@ export default function PostPage({ post }: Props) {
                     )}
                   </div>
                 );
-              }
+              },
             }
           } />
       </div>
@@ -157,13 +180,6 @@ export default function PostPage({ post }: Props) {
             type='text' />
         </label>
         <label className='block mb-5'>
-          <span className='text-gray-700'>Email</span>
-          <input
-            {...register('email', { required: true })}
-            className='shadow border rounded py-2 px-3 form-input mt-1 block w-full ring-yellow-500 outline-none focus:ring' placeholder='example@example.com'
-            type='email' />
-        </label>
-        <label className='block mb-5'>
           <span className='text-gray-700'>Comment</span>
           <textarea
             {...register('comment', { required: true })}
@@ -173,9 +189,6 @@ export default function PostPage({ post }: Props) {
         <div className='flex flex-col p-5'>
           {errors.author && (
             <span className='text-red-500'>- The Name field is required</span>
-          )}
-          {errors.email && (
-            <span className='text-red-500'>- The Email field is required</span>
           )}
           {errors.comment && (
             <span className='text-red-500'>- The Comment field is required</span>
