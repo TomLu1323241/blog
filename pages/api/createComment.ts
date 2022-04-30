@@ -21,6 +21,7 @@ export default function createComment(
     },
     approved: false,
     author: body.author,
+    email: body.email,
     comment: body.comment,
   });
   console.log(body);

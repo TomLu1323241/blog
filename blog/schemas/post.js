@@ -51,22 +51,7 @@ export default {
     {
       name: 'body',
       title: 'Body',
-      type: 'array',
-      of: [
-        {type: 'block'},
-        {
-          type: 'code', 
-          options: 
-          {
-            theme: 'tomorrow',
-            languageAlternatives: [
-              {title: 'C', value: 'c'},
-              {title: 'C#', value: 'csharp'},
-              {title: 'JavaScript', value: 'javascript'},
-            ]
-          }
-        },
-      ],
+      type: 'blockContent',
     },
   ],
 

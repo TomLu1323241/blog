@@ -22,5 +22,6 @@ export interface Post {
 export interface BlogComment {
   _id: string;
   author: string;
+  email: string;
   comment: string;
 }

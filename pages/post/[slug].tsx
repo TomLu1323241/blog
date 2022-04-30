@@ -7,8 +7,6 @@ import { BlogComment, Post } from '../../typings';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { useState } from 'react';
 import Head from 'next/head';
-import Highlight from 'react-highlight';
-import 'highlight.js/styles/an-old-hope.css';
 
 interface Props {
   post: Post;
@@ -20,7 +18,9 @@ export default function PostPage({ post }: Props) {
     handleSubmit,
     formState: { errors },
   } = useForm<BlogComment>();
+
   const [submitted, setSubmitted] = useState(false);
+
   const onSummit: SubmitHandler<BlogComment> = async (data: BlogComment) => {
     const res = await fetch('/api/createComment', {
       method: 'POST',
@@ -34,21 +34,6 @@ export default function PostPage({ post }: Props) {
       setSubmitted(false);
     }
   };
-
-  post.body.forEach((item: any) => {
-    if (item?._type === 'code') {
-      item._type = 'block';
-      let code = item.code;
-      let lang = item.language;
-      item.children = [
-        {
-          text: code,
-          lang: lang,
-        }
-      ];
-      item.style = 'customCode';
-    }
-  });
 
   return <main>
     <Head>
@@ -67,7 +52,7 @@ export default function PostPage({ post }: Props) {
       />
     </div>
     {/* Article */}
-    <article className='px-5 md:px-10 max-w-7xl mx-auto'>
+    <article className='px-10 max-w-7xl mx-auto'>
       <h1 className='text-3xl mt-5 mb-3'>{post.title}</h1>
       <h2 className='text-xl font-light text-gray-500 mb-2'>{post.description}</h2>
       <div className='flex items-center gap-2'>
@@ -81,64 +66,42 @@ export default function PostPage({ post }: Props) {
           content={post.body}
           serializers={
             {
-              customCode: (props: any) => {
-                console.log(props);
-                return (
-                  <div className='overflow-x-auto rounded-xl shadow-md border mx-auto max-w-4xl'>
-                    <Highlight className={`language-${props.children[0].props.node.lang} min-w-fit`}>{props.children[0].props.node.text}</Highlight>
-                  </div>
-                );
-              },
-              normal: (props: any) => {
-                return (
-                  <p className='text-xl my-5 break-words indent-8' {...props} />
-                );
-              },
-              h1: (props: any) => {
-                return (
-                  <h1 className='text-4xl font-bold my-5' {...props} />
-                );
-              },
-              h2: (props: any) => {
-                return (
-                  <h2 className='text-2xl font-bold my-5' {...props} />
-                );
-              },
-              li: ({ children }: any) => {
-                return (
-                  <li className='ml-16 list-disc'> {children} </li>
-                );
-              },
-              link: ({ href, children }: any) => {
-                return (
-                  <a href={href} className='text-blue-500 hover:underline'>
-                    {children}
-                  </a>
-                );
-              },
-              image: (props: any) => {
-                return (
-                  <img className='w-full max-h-[32rem] object-contain py-5' src={urlFor(props.asset).url()} />
-                );
-              },
-              blockquote: (props: any) => {
-                return (
-                  <div className='max-w-fit mx-auto bg-grey-light rounded-lg shadow-md p-8 border'>
-                    <h2 className='max-w-max italic text-right text-blue-darkest leading-normal'>
-                      {props.children[0].split('-')[0].trim()}
-                    </h2>
-                    {props.children[0].split('-')[1] ? (
-                      <p className='text-right pt-2 pr-6 text-gray-400'>
-                        - {props.children[0].split('-')[1].trim()}
-                      </p>
-                    ) : (
-                      <p className='text-right pt-2 pr-6 text-gray-400'>
-                        - anonymous
-                      </p>
-                    )}
-                  </div>
-                );
-              },
+              normal: (props: any) => (
+                <p className='text-xl my-5 break-words indent-8' {...props} />
+              ),
+              h1: (props: any) => (
+                <h1 className='text-4xl font-bold my-5' {...props} />
+              ),
+              h2: (props: any) => (
+                <h2 className='text-2xl font-bold my-5' {...props} />
+              ),
+              li: ({ children }: any) => (
+                <li className='ml-16 list-disc'> {children} </li>
+              ),
+              link: ({ href, children }: any) => (
+                <a href={href} className='text-blue-500 hover:underline'>
+                  {children}
+                </a>
+              ),
+              image: (props: any) => (
+                <img className='w-full max-h-[32rem] object-contain py-5' src={urlFor(props.asset).url()} />
+              ),
+              blockquote: (props: any) => (
+                <div className='max-w-fit mx-auto bg-grey-light rounded-lg shadow-md p-8 border'>
+                  <h2 className='max-w-max italic text-right text-blue-darkest leading-normal'>
+                    {props.children[0].split('-')[0].trim()}
+                  </h2>
+                  {props.children[0].split('-')[1] ? (
+                    <p className='text-right pt-2 pr-6 text-gray-400'>
+                      - {props.children[0].split('-')[1].trim()}
+                    </p>
+                  ) : (
+                    <p className='text-right pt-2 pr-6 text-gray-400'>
+                      - anonymous
+                    </p>
+                  )}
+                </div>
+              )
             }
           } />
       </div>
@@ -180,6 +143,13 @@ export default function PostPage({ post }: Props) {
             type='text' />
         </label>
         <label className='block mb-5'>
+          <span className='text-gray-700'>Email</span>
+          <input
+            {...register('email', { required: true })}
+            className='shadow border rounded py-2 px-3 form-input mt-1 block w-full ring-yellow-500 outline-none focus:ring' placeholder='example@example.com'
+            type='email' />
+        </label>
+        <label className='block mb-5'>
           <span className='text-gray-700'>Comment</span>
           <textarea
             {...register('comment', { required: true })}
@@ -189,6 +159,9 @@ export default function PostPage({ post }: Props) {
         <div className='flex flex-col p-5'>
           {errors.author && (
             <span className='text-red-500'>- The Name field is required</span>
+          )}
+          {errors.email && (
+            <span className='text-red-500'>- The Email field is required</span>
           )}
           {errors.comment && (
             <span className='text-red-500'>- The Comment field is required</span>
@@ -203,25 +176,19 @@ export default function PostPage({ post }: Props) {
       <hr className='pb-2' />
       <div className='flex flex-row mx-auto max-w-2xl gap-1'>
         <div className='flex flex-col'>
-          {post.comment.map((current, index) => {
-            return (
-              <p key={`${current.author}-${index}`} className='text-yellow-600 text-bold whitespace-nowrap'>{current.author}</p>
-            );
-          })}
+          {post.comment.map((current, index) => (
+            <p key={`${current.author}-${index}`} className='text-yellow-600 text-bold whitespace-nowrap'>{current.author}</p>
+          ))}
         </div>
         <div className='flex flex-col'>
-          {post.comment.map((current, index) => {
-            return (
-              <p key={`${current.comment}-${index}|`}> <span className='text-yellow-600 text-bold'>|</span></p>
-            );
-          })}
+          {post.comment.map((current, index) => (
+            <p key={`${current.comment}-${index}|`}> <span className='text-yellow-600 text-bold'>|</span></p>
+          ))}
         </div>
         <div className='flex flex-col'>
-          {post.comment.map((current, index) => {
-            return (
-              <p key={`${current.comment}-${index}`}>{current.comment}</p>
-            );
-          })}
+          {post.comment.map((current, index) => (
+            <p key={`${current.comment}-${index}`}>{current.comment}</p>
+          ))}
         </div>
       </div>
     </div>
@@ -241,13 +208,11 @@ export const getStaticPaths = async () => {
   `;
   const posts: Post[] = await sanityClient.fetch(query);
 
-  const paths = posts.map((post: Post) => {
-    return {
-      params: {
-        slug: post.slug.current,
-      }
-    };
-  });
+  const paths = posts.map((post: Post) => ({
+    params: {
+      slug: post.slug.current,
+    }
+  }));
 
   return {
     paths,
