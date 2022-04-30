@@ -7,20 +7,21 @@ import { BlogComment, Post } from '../../typings';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { useState } from 'react';
 import Head from 'next/head';
+import Highlight from 'react-highlight';
+import 'highlight.js/styles/an-old-hope.css';
 
 interface Props {
   post: Post;
 }
 
 export default function PostPage({ post }: Props) {
+  // Handle comments
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<BlogComment>();
-
   const [submitted, setSubmitted] = useState(false);
-
   const onSummit: SubmitHandler<BlogComment> = async (data: BlogComment) => {
     const res = await fetch('/api/createComment', {
       method: 'POST',
@@ -34,6 +35,22 @@ export default function PostPage({ post }: Props) {
       setSubmitted(false);
     }
   };
+
+  // Change code blocks
+  post.body.forEach((item: any) => {
+    if (item?._type === 'code') {
+      item._type = 'block';
+      let code = item.code;
+      let lang = item.language;
+      item.children = [
+        {
+          text: code,
+          lang: lang,
+        }
+      ];
+      item.style = 'customCode';
+    }
+  });
 
   return <main>
     <Head>
@@ -66,6 +83,13 @@ export default function PostPage({ post }: Props) {
           content={post.body}
           serializers={
             {
+              customCode: (props: any) => {
+                return (
+                  <div className='overflow-x-auto rounded-xl shadow-md border mx-auto max-w-4xl'>
+                    <Highlight className={`language-${props.children[0].props.node.lang} min-w-fit`}>{props.children[0].props.node.text}</Highlight>
+                  </div>
+                );
+              },
               normal: (props: any) => (
                 <p className='text-xl my-5 break-words indent-8' {...props} />
               ),
