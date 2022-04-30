@@ -37,20 +37,24 @@ export default function PostPage({ post }: Props) {
 
   // Change code blocks
   let body = JSON.parse(JSON.stringify(post.body));
-  body.forEach((item: any) => {
-    if (item?._type === 'code') {
-      item._type = 'block';
-      let code = item.code;
-      let lang = item.language;
-      item.children = [
-        {
-          text: code,
-          lang: lang,
-        }
-      ];
-      item.style = 'customCode';
-    }
+  // body.forEach((item: any) => {
+  //   if (item?._type === 'code') {
+  //     item._type = 'block';
+  //     let code = item.code;
+  //     let lang = item.language;
+  //     item.children = [
+  //       {
+  //         text: code,
+  //         lang: lang,
+  //       }
+  //     ];
+  //     item.style = 'customCode';
+  //   }
+  // });
+  body = body.filter((item: any) => {
+    return item._type != 'code';
   });
+  console.log(body);
 
   return <main>
     <Head>
@@ -61,8 +65,8 @@ export default function PostPage({ post }: Props) {
       <meta property='og:description' content={post.description} />
       <link rel='stylesheet' href='https://highlightjs.org/static/demo/styles/an-old-hope.css' />
       {/* eslint-disable-next-line @next/next/no-sync-scripts */}
-      <script src='https://highlightjs.org/static/highlight.min.js'></script>
-      <script>hljs.highlightAll();</script>
+      {/* <script src='https://highlightjs.org/static/highlight.min.js'></script>
+      <script>hljs.highlightAll();</script> */}
     </Head>
     <Header />
     {/* Banner */}
@@ -87,17 +91,17 @@ export default function PostPage({ post }: Props) {
           content={body}
           serializers={
             {
-              customCode: (props: any) => {
-                return (
-                  <div className='overflow-x-auto rounded-xl shadow-md border mx-auto max-w-4xl'>
-                    <pre>
-                      <code className={`language-${props.children[0].props.node.lang} min-w-fit`}>
-                        {props.children[0].props.node.text}
-                      </code>
-                    </pre>
-                  </div>
-                );
-              },
+              // customCode: (props: any) => {
+              //   return (
+              //     <div className='overflow-x-auto rounded-xl shadow-md border mx-auto max-w-4xl'>
+              //       <pre>
+              //         <code className={`language-${props.children[0].props.node.lang} min-w-fit`}>
+              //           {props.children[0].props.node.text}
+              //         </code>
+              //       </pre>
+              //     </div>
+              //   );
+              // },
               normal: (props: any) => (
                 <p className='text-xl my-5 break-words indent-8' {...props} />
               ),
