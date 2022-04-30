@@ -8,7 +8,7 @@ import { useForm, SubmitHandler } from 'react-hook-form';
 import { useState } from 'react';
 import Head from 'next/head';
 import Highlight from 'react-highlight';
-import 'highlight.js/styles/an-old-hope.css';
+// import 'highlight.js/styles/an-old-hope.css';
 
 interface Props {
   post: Post;
@@ -60,6 +60,7 @@ export default function PostPage({ post }: Props) {
       <meta property='og:title' content={post.title} />
       <meta property='og:image' content={urlFor(post.mainImage).url()} />
       <meta property='og:description' content={post.description} />
+      <link rel='stylesheet' href='https://highlightjs.org/static/demo/styles/an-old-hope.css' />
     </Head>
     <Header />
     {/* Banner */}
