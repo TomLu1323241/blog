@@ -7,7 +7,8 @@ import { BlogComment, Post } from '../../typings';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { useState } from 'react';
 import Head from 'next/head';
-// import 'highlight.js/styles/an-old-hope.css';
+import Highlight from 'react-highlight';
+import 'highlight.js/styles/an-old-hope.css';
 
 interface Props {
   post: Post;
@@ -36,25 +37,20 @@ export default function PostPage({ post }: Props) {
   };
 
   // Change code blocks
-  let body = JSON.parse(JSON.stringify(post.body));
-  // body.forEach((item: any) => {
-  //   if (item?._type === 'code') {
-  //     item._type = 'block';
-  //     let code = item.code;
-  //     let lang = item.language;
-  //     item.children = [
-  //       {
-  //         text: code,
-  //         lang: lang,
-  //       }
-  //     ];
-  //     item.style = 'customCode';
-  //   }
-  // });
-  body = body.filter((item: any) => {
-    return item._type != 'code';
+  post.body.forEach((item: any) => {
+    if (item?._type === 'code') {
+      item._type = 'block';
+      let code = item.code;
+      let lang = item.language;
+      item.children = [
+        {
+          text: code,
+          lang: lang,
+        }
+      ];
+      item.style = 'customCode';
+    }
   });
-  console.log(body);
 
   return <main>
     <Head>
@@ -88,20 +84,18 @@ export default function PostPage({ post }: Props) {
         <PortableText
           dataset={process.env.NEXT_PUBLIC_SANITY_DATASET}
           projectId={process.env.NEXT_PUBLIC_SANITY_PROJECT_ID}
-          content={body}
+          content={post.body}
           serializers={
             {
-              // customCode: (props: any) => {
-              //   return (
-              //     <div className='overflow-x-auto rounded-xl shadow-md border mx-auto max-w-4xl'>
-              //       <pre>
-              //         <code className={`language-${props.children[0].props.node.lang} min-w-fit`}>
-              //           {props.children[0].props.node.text}
-              //         </code>
-              //       </pre>
-              //     </div>
-              //   );
-              // },
+              customCode: (props: any) => {
+                return (
+                  <div className='overflow-x-auto rounded-xl shadow-md border mx-auto max-w-4xl'>
+                    <Highlight className={`language-${props.children[0].props.node.lang} min-w-fit`}>
+                      {props.children[0].props.node.text}
+                    </Highlight>
+                  </div>
+                );
+              },
               normal: (props: any) => (
                 <p className='text-xl my-5 break-words indent-8' {...props} />
               ),
