@@ -7,7 +7,6 @@ import { BlogComment, Post } from '../../typings';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { useState } from 'react';
 import Head from 'next/head';
-import Highlight from 'react-highlight';
 // import 'highlight.js/styles/an-old-hope.css';
 
 interface Props {
@@ -61,6 +60,9 @@ export default function PostPage({ post }: Props) {
       <meta property='og:image' content={urlFor(post.mainImage).url()} />
       <meta property='og:description' content={post.description} />
       <link rel='stylesheet' href='https://highlightjs.org/static/demo/styles/an-old-hope.css' />
+      {/* eslint-disable-next-line @next/next/no-sync-scripts */}
+      <script src='https://highlightjs.org/static/highlight.min.js'></script>
+      <script>hljs.highlightAll();</script>
     </Head>
     <Header />
     {/* Banner */}
@@ -88,7 +90,11 @@ export default function PostPage({ post }: Props) {
               customCode: (props: any) => {
                 return (
                   <div className='overflow-x-auto rounded-xl shadow-md border mx-auto max-w-4xl'>
-                    <Highlight className={`language-${props.children[0].props.node.lang} min-w-fit`}>{props.children[0].props.node.text}</Highlight>
+                    <pre>
+                      <code className={`language-${props.children[0].props.node.lang} min-w-fit`}>
+                        {props.children[0].props.node.text}
+                      </code>
+                    </pre>
                   </div>
                 );
               },
