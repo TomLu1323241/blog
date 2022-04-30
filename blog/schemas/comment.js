@@ -16,6 +16,11 @@ export default {
       description: ' Comments won\'t be shown on the site without approval',
     },
     {
+      name: 'email',
+      title: 'Email',
+      type: 'string',
+    },
+    {
       name: 'comment',
       title: 'Comment',
       type: 'string',

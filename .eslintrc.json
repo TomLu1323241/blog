@@ -18,10 +18,6 @@
     "jsx-quotes": [
       "error",
       "prefer-single"
-    ],
-    "arrow-body-style": [
-      "error",
-      "always"
     ]
   }
 }
