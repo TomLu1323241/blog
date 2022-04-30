@@ -143,13 +143,6 @@ export default function PostPage({ post }: Props) {
             type='text' />
         </label>
         <label className='block mb-5'>
-          <span className='text-gray-700'>Email</span>
-          <input
-            {...register('email', { required: true })}
-            className='shadow border rounded py-2 px-3 form-input mt-1 block w-full ring-yellow-500 outline-none focus:ring' placeholder='example@example.com'
-            type='email' />
-        </label>
-        <label className='block mb-5'>
           <span className='text-gray-700'>Comment</span>
           <textarea
             {...register('comment', { required: true })}
@@ -159,9 +152,6 @@ export default function PostPage({ post }: Props) {
         <div className='flex flex-col p-5'>
           {errors.author && (
             <span className='text-red-500'>- The Name field is required</span>
-          )}
-          {errors.email && (
-            <span className='text-red-500'>- The Email field is required</span>
           )}
           {errors.comment && (
             <span className='text-red-500'>- The Comment field is required</span>
