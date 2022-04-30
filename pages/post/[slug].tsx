@@ -37,7 +37,8 @@ export default function PostPage({ post }: Props) {
   };
 
   // Change code blocks
-  post.body.forEach((item: any) => {
+  let body = JSON.parse(JSON.stringify(post.body));
+  body.forEach((item: any) => {
     if (item?._type === 'code') {
       item._type = 'block';
       let code = item.code;
@@ -80,7 +81,7 @@ export default function PostPage({ post }: Props) {
         <PortableText
           dataset={process.env.NEXT_PUBLIC_SANITY_DATASET}
           projectId={process.env.NEXT_PUBLIC_SANITY_PROJECT_ID}
-          content={post.body}
+          content={body}
           serializers={
             {
               customCode: (props: any) => {
