@@ -87,6 +87,9 @@ export default function PostPage({ post }: Props) {
           content={post.body}
           serializers={
             {
+              code: (props: any) => {
+                return <code className='rounded-md bg-slate-800 text-yellow-400' {...props} />;
+              },
               customCode: (props: any) => {
                 return (
                   <div className='overflow-x-auto rounded-xl shadow-md border mx-auto max-w-4xl'>
