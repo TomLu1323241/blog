@@ -73,7 +73,7 @@ export default function PostPage({ post }: Props) {
       />
     </div>
     {/* Article */}
-    <article className='px-10 max-w-7xl mx-auto'>
+    <article className='px-5 md:px-10 max-w-7xl mx-auto'>
       <h1 className='text-3xl mt-5 mb-3'>{post.title}</h1>
       <h2 className='text-xl font-light text-gray-500 mb-2'>{post.description}</h2>
       <div className='flex items-center gap-2'>
@@ -88,7 +88,7 @@ export default function PostPage({ post }: Props) {
           serializers={
             {
               code: (props: any) => {
-                return <code className='rounded-md bg-slate-800 text-yellow-400' {...props} />;
+                return <code className='rounded-md bg-slate-200 text-gray-600' {...props} />;
               },
               customCode: (props: any) => {
                 return (
@@ -100,13 +100,16 @@ export default function PostPage({ post }: Props) {
                 );
               },
               normal: (props: any) => (
-                <p className='text-xl my-5 break-words indent-8' {...props} />
+                <p className='text-base md:text-xl my-1 break-words indent-8' {...props} />
               ),
               h1: (props: any) => (
                 <h1 className='text-4xl font-bold my-5' {...props} />
               ),
               h2: (props: any) => (
-                <h2 className='text-2xl font-bold my-5' {...props} />
+                <h2 className='text-2xl font-bold my-3' {...props} />
+              ),
+              h3: (props: any) => (
+                <h3 className='text-lg md:text-xl font-bold my-1 text-gray-600' {...props} />
               ),
               li: ({ children }: any) => (
                 <li className='ml-16 list-disc'> {children} </li>
