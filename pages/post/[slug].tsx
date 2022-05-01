@@ -71,9 +71,6 @@ export default function PostPage({ post, imageGroupAssets }: Props) {
       <meta property='og:image' content={urlFor(post.mainImage).url()} />
       <meta property='og:description' content={post.description} />
       <link rel='stylesheet' href='https://highlightjs.org/static/demo/styles/an-old-hope.css' />
-      {/* eslint-disable-next-line @next/next/no-sync-scripts */}
-      {/* <script src='https://highlightjs.org/static/highlight.min.js'></script>
-      <script>hljs.highlightAll();</script> */}
     </Head>
     <Header />
     {/* Banner */}
@@ -101,7 +98,8 @@ export default function PostPage({ post, imageGroupAssets }: Props) {
               imageGroup: (props: any) => {
                 let imageBody: Object[] = props.children[0].props.node.body;
                 return (
-                  <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gpa-6 p-2 md:p-6'>
+                  // <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gpa-6 p-2 md:p-6'>
+                  <div className='flex flex-wrap gap-4 md:mx-12'>
                     {imageBody.map((item: any) => {
                       let src: string = '';
                       if (item._type == 'urlObject') {
@@ -109,23 +107,21 @@ export default function PostPage({ post, imageGroupAssets }: Props) {
                       } else if (item._type == 'image') {
                         src = urlFor(item.asset).url();
                       }
-                      return <img key={item._key} className='h-96 w-full object-contain hover:scale-125 transition-transform duration-200 ease-in-out' src={src} />;
+                      return <img key={item._key} className='max-h-96 mx-auto object-contain hover:scale-125 transition-transform duration-200 ease-in-out' src={src} />;
                     })}
                   </div>
                 );
               },
-              code: (props: any) => {
-                return <code className='rounded-md bg-slate-200 text-gray-600' {...props} />;
-              },
-              customCode: (props: any) => {
-                return (
-                  <div className='overflow-x-auto rounded-xl shadow-md border mx-auto max-w-4xl'>
-                    <Highlight className={`language-${props.children[0].props.node.lang} min-w-fit`}>
-                      {props.children[0].props.node.text}
-                    </Highlight>
-                  </div>
-                );
-              },
+              code: (props: any) => (
+                <code className='rounded-md bg-slate-200 text-gray-600' {...props} />
+              ),
+              customCode: (props: any) => (
+                <div className='overflow-x-auto rounded-xl shadow-md border mx-auto max-w-4xl'>
+                  <Highlight className={`language-${props.children[0].props.node.lang} min-w-fit`}>
+                    {props.children[0].props.node.text}
+                  </Highlight>
+                </div>
+              ),
               normal: (props: any) => (
                 <p className='text-base md:text-xl my-1 break-words indent-8' {...props} />
               ),
