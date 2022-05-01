@@ -12,9 +12,10 @@ import 'highlight.js/styles/an-old-hope.css';
 
 interface Props {
   post: Post;
+  imageGroupAssets: { [key: string]: Object };
 }
 
-export default function PostPage({ post }: Props) {
+export default function PostPage({ post, imageGroupAssets }: Props) {
   // Handle comments
   const {
     register,
@@ -49,6 +50,16 @@ export default function PostPage({ post }: Props) {
         }
       ];
       item.style = 'customCode';
+    }
+  });
+  // Add references to group photos
+  post.body.forEach((item: any) => {
+    if (item._type == 'reference') {
+      item._type = 'block';
+      item.children = [
+        imageGroupAssets[item._ref]
+      ];
+      item.style = 'imageGroup';
     }
   });
 
@@ -87,6 +98,22 @@ export default function PostPage({ post }: Props) {
           content={post.body}
           serializers={
             {
+              imageGroup: (props: any) => {
+                let imageBody: Object[] = props.children[0].props.node.body;
+                return (
+                  <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gpa-6 p-2 md:p-6'>
+                    {imageBody.map((item: any) => {
+                      let src: string = '';
+                      if (item._type == 'urlObject') {
+                        src = item.urlField;
+                      } else if (item._type == 'image') {
+                        src = urlFor(item.asset).url();
+                      }
+                      return <img key={item._key} className='h-96 w-full object-contain hover:scale-125 transition-transform duration-200 ease-in-out' src={src} />;
+                    })}
+                  </div>
+                );
+              },
               code: (props: any) => {
                 return <code className='rounded-md bg-slate-200 text-gray-600' {...props} />;
               },
@@ -274,15 +301,34 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   const post = await sanityClient.fetch(query, {
     slug: params?.slug,
   });
-
   if (!post) {
     return {
       notFound: true,
     };
   }
+  let imageGroupsRefs: string[] = [];
+  post.body.forEach((item: any) => {
+    if (item._type == 'reference') {
+      imageGroupsRefs.push(item._ref);
+    }
+  });
+  let imageGroupAssets: { [key: string]: Object } = {};
+  for (let i = 0; i < imageGroupsRefs.length; i++) {
+    const imageQuery = `
+    *[_type == 'imageGroups' && _id == $ref][0] {
+      body
+    }
+    `;
+    const imageGroups = await sanityClient.fetch(imageQuery, {
+      ref: imageGroupsRefs[i],
+    });
+    imageGroupAssets[imageGroupsRefs[i]] = imageGroups;
+  }
+
   return {
     props: {
       post,
+      imageGroupAssets,
     },
     revalidate: 60,
   };

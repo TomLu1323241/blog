@@ -67,6 +67,7 @@ export default {
           }
         },
         {type: 'image'},
+        {type: 'reference', to: {type: 'imageGroups'}},
       ],
     },
   ],
