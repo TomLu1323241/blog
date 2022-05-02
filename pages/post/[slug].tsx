@@ -106,7 +106,7 @@ export default function PostPage({ post, imageGroupAssets }: Props) {
                       } else if (item._type == 'image') {
                         src = urlFor(item.asset).url();
                       }
-                      return <img key={item._key} className='max-h-96 mx-auto object-contain hover:scale-125 transition-transform duration-200 ease-in-out' src={src} />;
+                      return <img key={item._key} className='max-h-64 mx-auto object-contain hover:scale-125 transition-transform duration-200 ease-in-out' src={src} />;
                     })}
                   </div>
                 );
