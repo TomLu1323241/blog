@@ -18,12 +18,12 @@ const config = {
 
 const sanityClient = createClient(config);
 
-export default function createComment(
+export default async function createComment(
   req: NextApiRequest,
   res: NextApiResponse<Data>
 ) {
   const body: BlogComment = JSON.parse(req.body);
-  sanityClient.create({
+  await sanityClient.create({
     _type: 'comment',
     post: {
       _type: 'reference',
