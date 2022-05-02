@@ -8,20 +8,21 @@ type Data = {
   name: string
 }
 
+const config = {
+  dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || 'production',
+  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID,
+  token: process.env.SANITY_API_TOKEN,
+  apiVersion: '2021-03-25',
+  useCdn: process.env.USE_CDN == '1',
+};
+
+const sanityClient = createClient(config);
+
 export default function createComment(
   req: NextApiRequest,
   res: NextApiResponse<Data>
 ) {
   const body: BlogComment = JSON.parse(req.body);
-  const config = {
-    dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || 'production',
-    projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID,
-    token: process.env.SANITY_API_TOKEN,
-    apiVersion: '2021-03-25',
-    useCdn: process.env.USE_CDN == '1',
-  };
-
-  const sanityClient = createClient(config);
   sanityClient.create({
     _type: 'comment',
     post: {
