@@ -63,14 +63,13 @@ export default function PostPage({ post, imageGroupAssets }: Props) {
     }
   });
 
-  return <main>
+  return <main className='overflow-clip'>
     <Head>
       <title>{post.title}</title>
       <link rel='icon' href='/logo.png' />
       <meta property='og:title' content={post.title} />
       <meta property='og:image' content={urlFor(post.mainImage).url()} />
       <meta property='og:description' content={post.description} />
-      <link rel='stylesheet' href='https://highlightjs.org/static/demo/styles/an-old-hope.css' />
     </Head>
     <Header />
     {/* Banner */}
