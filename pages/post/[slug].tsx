@@ -15,25 +15,35 @@ interface Props {
   imageGroupAssets: { [key: string]: Object };
 }
 
+enum SubmittedProgress {
+  NotSubmitted,
+  Submitting,
+  Submitted,
+}
+
 export default function PostPage({ post, imageGroupAssets }: Props) {
   // Handle comments
+  const [submitted, setSubmitted] = useState<SubmittedProgress>(SubmittedProgress.NotSubmitted);
+  const [submittedSuccess, setSubmittedSuccess] = useState<boolean>(false);
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<BlogComment>();
-  const [submitted, setSubmitted] = useState(false);
   const onSummit: SubmitHandler<BlogComment> = async (data: BlogComment) => {
+    setSubmitted(SubmittedProgress.Submitting);
     const res = await fetch('/api/createComment', {
       method: 'POST',
       body: JSON.stringify(data),
     });
     if (res.ok) {
       console.log('submitted comment');
-      setSubmitted(true);
+      setSubmitted(SubmittedProgress.Submitted);
+      setSubmittedSuccess(true);
     } else {
       console.log(`${res.status} : ${res.statusText}`);
-      setSubmitted(false);
+      setSubmitted(SubmittedProgress.Submitted);
+      setSubmittedSuccess(false);
     }
   };
 
@@ -166,17 +176,8 @@ export default function PostPage({ post, imageGroupAssets }: Props) {
     </article>
     <hr className='max-w-2xl my-5 mx-auto border border-yellow-500' />
 
-    {/* comment section */}
-    {submitted ? (
-      <div className='flex flex-col p-10 my-10 bg-yellow-500 text-white max-w-2xl mx-auto'>
-        <h3 className='text-2xl font-bold'>
-          Thank you for submitting your comment!
-        </h3>
-        <p>
-          Once it has been approved, it will appear below!
-        </p>
-      </div>
-    ) : (
+    {/* comment section form*/}
+    {submitted == SubmittedProgress.NotSubmitted && (
       <form
         onSubmit={handleSubmit(onSummit)}
         className='flex flex-col p-5 max-w-2xl mx-auto'
@@ -218,8 +219,34 @@ export default function PostPage({ post, imageGroupAssets }: Props) {
         <input type='submit' className='shadow bg-yellow-500 hover:bg-yellow-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded cursor-pointer' />
       </form>
     )}
-    <div className='mx-auto max-w-2xl shadow-sm shadow-yellow-500 p-12 mb-5'>
+    {/* loading gif */}
+    {submitted == SubmittedProgress.Submitting && (
+      <img className='h-20 mx-auto' src='/loading.gif' />
+    )}
+    {/* successful submission of comment */}
+    {submitted == SubmittedProgress.Submitted && submittedSuccess && (
+      <div className='flex flex-col p-10 my-10 bg-yellow-500 text-white max-w-2xl mx-auto'>
+        <h3 className='text-2xl font-bold'>
+          Thank you for submitting your comment!
+        </h3>
+        <p>
+          Once it has been approved, it will appear below!
+        </p>
+      </div>
+    )}
+    {/* failed submission of comment */}
+    {submitted == SubmittedProgress.Submitted && !submittedSuccess && (
+      <div className='flex flex-col p-10 my-10 bg-yellow-500 text-white max-w-2xl mx-auto'>
+        <h3 className='text-2xl font-bold'>
+          Error has occurred while submitting your comment.
+        </h3>
+        <p>
+          Please refresh the page and try again.
+        </p>
+      </div>
+    )}
 
+    <div className='mx-auto max-w-2xl shadow-sm shadow-yellow-500 p-12 mb-5'>
       <h3 className='mx-auto max-w-2xl text-3xl font-bold'>Comments</h3>
       <hr className='pb-2' />
       <div className='flex flex-row mx-auto max-w-2xl gap-1'>
