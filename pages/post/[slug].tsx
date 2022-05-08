@@ -221,7 +221,7 @@ export default function PostPage({ post, imageGroupAssets }: Props) {
     )}
     {/* loading gif */}
     {submitted == SubmittedProgress.Submitting && (
-      <img className='h-20 mx-auto' src='/loading.gif' />
+      <img className='h-20 mx-auto' src={Math.random() > 0.5 ? '/loading.gif' : '/keqing-dance.gif'} />
     )}
     {/* successful submission of comment */}
     {submitted == SubmittedProgress.Submitted && submittedSuccess && (
