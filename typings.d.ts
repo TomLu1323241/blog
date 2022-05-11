@@ -16,11 +16,16 @@ export interface Post {
     current: string;
   };
   body: object[];
-  comment: [{ author: string, comment: string }];
+  comment: Comment[];
 }
 
 export interface BlogComment {
   _id: string;
+  author: string;
+  comment: string;
+}
+
+export interface Comment {
   author: string;
   comment: string;
 }
