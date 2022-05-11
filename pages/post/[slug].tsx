@@ -13,7 +13,7 @@ import CommentSection from '../../components/commentSection';
 
 interface Props {
   post: Post;
-  imageGroupAssets: { [key: string]: Object };
+  imageGroupAssets: Record<string, Object>;
 }
 
 
@@ -214,7 +214,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
       imageGroupsRefs.push(item._ref);
     }
   });
-  let imageGroupAssets: { [key: string]: Object } = {};
+  let imageGroupAssets: Record<string, Object> = {};
   for (let i = 0; i < imageGroupsRefs.length; i++) {
     const imageQuery = `
     *[_type == 'imageGroups' && _id == $ref][0] {
