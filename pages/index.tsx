@@ -17,6 +17,9 @@ export default function Home({ posts }: Props) {
       <Head>
         <title>Tom's Blog</title>
         <link rel='icon' href='/logo.png' />
+        <meta property='og:title' content="Welcome to Tom's blog" />
+        <meta property='og:image' content='/T.png' />
+        <meta property='og:description' content='Some details about the awesome Tom!!!' />
       </Head>
       <Header />
 
