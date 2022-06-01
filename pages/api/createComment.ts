@@ -29,7 +29,7 @@ export default async function createComment(
       _type: 'reference',
       _ref: body._id,
     },
-    approved: false,
+    approved: true,
     author: body.author,
     comment: body.comment,
   });
