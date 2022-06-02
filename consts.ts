@@ -1,0 +1,1 @@
+export const LoadingGifs: string[] = ['/loading-ame.gif', '/loading-keqing.gif', '/loading-hutao.gif'];

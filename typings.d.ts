@@ -25,6 +25,10 @@ export interface BlogComment {
   comment: string;
 }
 
+export interface Email {
+  email: string;
+}
+
 export interface Comment {
   author: string;
   comment: string;

@@ -1,19 +1,22 @@
 export default {
-  name: 'emailList',
+  name: 'subEmail',
   title: 'Email',
   type: 'document',
   fields: [
     {
-      name: 'emailList',
+      name: 'subEmail',
       title: 'Email',
-      description: 'Name of the Author',
       type: 'string',
     },
     {
       name: 'verified',
       title: 'Verified',
       type: 'boolean',
-      description: 'Emails will not send unless ',
+    },
+    {
+      name: 'code',
+      title: 'Verification Code',
+      type: 'string',
     },
   ]
 }

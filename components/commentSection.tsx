@@ -1,16 +1,11 @@
 import { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { BlogComment, Comment } from '../typings';
+import { SubmittedProgress } from '../enums';
 
 interface Props {
   post_id: string;
   comments: Comment[];
-}
-
-enum SubmittedProgress {
-  NotSubmitted,
-  Submitting,
-  Submitted,
 }
 
 const LoadingGifs: string[] = ['/loading-ame.gif', '/loading-keqing.gif', '/loading-hutao.gif'];
