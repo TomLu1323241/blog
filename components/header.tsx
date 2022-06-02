@@ -6,11 +6,13 @@ function Header() {
 
       <div className='flex items-center space-x-5'>
         <Link href='/' passHref>
-          <img
-            className='w-44 object-contain cursor-pointer'
-            src='/logo long.png'
-            alt=''
-          />
+          <a>
+            <img
+              className='w-44 object-contain cursor-pointer'
+              src='/logo long.png'
+              alt=''
+            />
+          </a>
         </Link>
         <div className='hidden md:inline-flex items-center space-x-5'>
           <h3>About</h3>
