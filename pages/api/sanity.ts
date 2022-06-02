@@ -1,0 +1,11 @@
+import { createClient } from 'next-sanity';
+
+const config = {
+  dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || 'production',
+  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID,
+  token: process.env.SANITY_API_TOKEN,
+  apiVersion: '2021-03-25',
+  useCdn: process.env.USE_CDN == '1',
+};
+
+export const sanityClient = createClient(config);
