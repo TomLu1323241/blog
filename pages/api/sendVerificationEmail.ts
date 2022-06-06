@@ -61,7 +61,15 @@ export default async function createComment(
       subject: `Verification Code: ${code}`,
       text: `Your verification code is ${code}`,
     };
-    await transporter.sendMail(mailOptions);
+    await new Promise((resolve, reject) => {
+      transporter.sendMail(mailOptions, (err, info) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(info);
+        }
+      });
+    });
   } else {
     res.status(409).end();
   }
