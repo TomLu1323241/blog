@@ -1,18 +1,21 @@
 import Head from 'next/head';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { SubmittedProgress } from '../enums';
-import { Email } from '../typings';
+import { Email, EmailCode } from '../typings';
 import { LoadingGifs } from '../consts';
+import VerificationInput from 'react-verification-input';
 
 export default function EmailVerification() {
-  const [submittedEmail, setSubmittedEmail] = useState<SubmittedProgress>(SubmittedProgress.NotSubmitted);
+  const [email, setEmail] = useState<string>('');
+  const [submittedEmail, setSubmittedEmail] = useState<SubmittedProgress>(SubmittedProgress.NotSubmitted); // TODO: change this
   const {
     register: registerEmail,
     handleSubmit: handleSubmitEmail,
     formState: { errors: errorsEmail },
   } = useForm<Email>();
   const onSummitEmail: SubmitHandler<Email> = async (data: Email) => {
+    setEmail(data.email);
     setSubmittedEmail(SubmittedProgress.Submitting);
     const res = await fetch('/api/sendVerificationEmail', {
       method: 'POST',
@@ -31,7 +34,21 @@ export default function EmailVerification() {
     register: registerCode,
     handleSubmit: handleSubmitCode,
     formState: { errors: errorsCode },
-  } = useForm<Email>();
+    setValue: setValueCode,
+  } = useForm<EmailCode>();
+  const onSummitCode: SubmitHandler<EmailCode> = async (data: EmailCode) => {
+    // console.log(data);
+    // return;
+    const res = await fetch('/api/verifyEmailCode', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+    if (res.ok) {
+      console.log('submitted comment');
+    } else {
+      console.log(`${res.status} : ${res.statusText}`);
+    }
+  };
   return <>
     <Head>
       <title>Subscribe!!!</title>
@@ -67,8 +84,41 @@ export default function EmailVerification() {
         {submittedEmail == SubmittedProgress.Submitting &&
           <img className='h-40 mx-auto' src={LoadingGifs[Math.floor(Math.random() * LoadingGifs.length)]} />
         }
-        {submittedEmail == SubmittedProgress.Submitted &&
-          <p>Good job :D</p>
+
+        {(submittedEmail == SubmittedProgress.Submitted && submittedCode == SubmittedProgress.NotSubmitted) &&
+          <form onSubmit={handleSubmitCode(onSummitCode)}>
+            <input
+              {...registerCode('email')}
+              // Set require to true
+              type='hidden'
+              value={email}
+            />
+            <div className='flex flex-row align-middle'>
+              <VerificationInput
+                removeDefaultStyles
+                validChars='[a-z|0-9]*'
+                placeholder='·'
+                onChange={(e) => {
+                  setValueCode('code', e);
+                }}
+                classNames={{
+                  container: 'h-24 flex flex-row',
+                  character: 'w-16 text-6xl leading-[5.5rem]'
+                }}
+              />
+            </div>
+            <button
+              type='submit'
+              className='shadow bg-yellow-500 hover:bg-yellow-400 focus:shadow-outline focus:outline-none text-white font-bold mt-4 mb-2 py-2 px-4 rounded cursor-pointer w-full'>
+              Verify Email!
+            </button>
+            {errorsCode.email && (
+              <span className='text-red-500'>- The Email field is required</span>
+            )}
+            {errorsCode.code && (
+              <span className='text-red-500'>- The code field is required</span>
+            )}
+          </form>
         }
       </div>
     </div>

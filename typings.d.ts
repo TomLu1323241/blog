@@ -29,6 +29,11 @@ export interface Email {
   email: string;
 }
 
+export interface EmailCode {
+  email: string;
+  code: string;
+}
+
 export interface Comment {
   author: string;
   comment: string;
