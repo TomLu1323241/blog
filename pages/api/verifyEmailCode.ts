@@ -22,8 +22,8 @@ export default async function createComment(
   }
   `, { email: body.email });
   if (result.code === body.code) {
-    res.status(200).end();
     await sanityClient.patch(result._id).set({ verified: true }).commit();
+    res.status(200).end();
   } else {
     res.status(409).end();
   }
