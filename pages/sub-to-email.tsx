@@ -68,7 +68,8 @@ export default function EmailVerification() {
             <h1 className='text-3xl mx-auto pt-4'>
               Please enter your email:
             </h1>
-            <p className='text-gray-500 text-sm pb-4 pt-2'>Note: This will probably end up in your spam email and you need to tell your email account this is not spam</p>
+            <p className='text-gray-500 text-sm pt-2 text-center'>Note: This will probably end up in your spam email and you need to tell your email account this is not spam</p>
+            <p className='text-gray-500 text-sm pb-4 pt-2 text-center'>For the moment, emails will not be sent to anyone besides the verification email. I've not built the email subscription service yet 😐😐😐</p>
           </>
         }
         {submittedEmail == SubmittedProgress.NotSubmitted &&
@@ -109,7 +110,6 @@ export default function EmailVerification() {
               type='hidden'
               value={email}
             />
-            {/* TODO: make this look a bit prettier */}
             <div className='flex flex-row align-middle mx-auto justify-center'>
               <VerificationInput
                 removeDefaultStyles
@@ -122,8 +122,8 @@ export default function EmailVerification() {
                   }
                 }}
                 classNames={{
-                  container: 'h-24 flex flex-row mx-auto',
-                  character: 'w-16 text-6xl leading-[5.5rem]'
+                  container: 'h-24 flex flex-row mx-auto gap-2',
+                  character: 'w-16 text-6xl leading-[5.5rem] rounded-2xl bg-yellow-100 border-2 border-yellow-200 hover:bg-yellow-200'
                 }}
               />
             </div>
