@@ -45,7 +45,6 @@ export default async function createComment(
     } else {
       code = checkIfEmailAlreadyExists.code;
     }
-    res.status(200).end();
     const transporter = nodemailer.createTransport({
       host: 'smtp.gmail.com',
       port: 465,
@@ -70,6 +69,7 @@ export default async function createComment(
         }
       });
     });
+    res.status(200).end();
   } else {
     res.status(409).end();
   }
