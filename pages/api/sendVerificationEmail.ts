@@ -1,5 +1,3 @@
-// Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-// Trying original sanity client fix at 2:26:55
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { Email } from '../../typings';
 import { sanityClient } from './sanity';
@@ -20,7 +18,7 @@ function makeID(length: number): string {
   return result;
 }
 
-export default async function createComment(
+export default async function sendVerificationEmail(
   req: NextApiRequest,
   res: NextApiResponse<Data>
 ) {

@@ -1,0 +1,12 @@
+name: Hourly cron job
+on:
+  schedule:
+    - cron: '0 15 * * 1'
+    # '0 19 * * 5' every Friday night at 7pm
+jobs:
+  cron:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Hourly cron job
+        run: |
+          curl --GET --url 'https://www.tomlu.me/api/hello/emailSubs'

@@ -1,5 +1,3 @@
-// Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-// Trying original sanity client fix at 2:26:55
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { BlogComment } from '../../typings';
 import { sanityClient } from './sanity';

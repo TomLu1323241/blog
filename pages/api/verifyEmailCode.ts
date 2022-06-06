@@ -1,15 +1,12 @@
-// Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-// Trying original sanity client fix at 2:26:55
-import { STATUS_CODES } from 'http';
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { Email, EmailCode } from '../../typings';
+import { EmailCode } from '../../typings';
 import { sanityClient } from './sanity';
 
 type Data = {
   name: string
 }
 
-export default async function createComment(
+export default async function verifyEmailCode(
   req: NextApiRequest,
   res: NextApiResponse<Data>
 ) {
