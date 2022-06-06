@@ -1,7 +1,7 @@
 name: Hourly cron job
 on:
   schedule:
-    - cron: '0 20 * * 1'
+    - cron: '*/15 * * * *'
     # '0 19 * * 5' every Friday night at 7pm
 jobs:
   cron:
