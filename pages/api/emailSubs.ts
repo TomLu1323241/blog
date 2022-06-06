@@ -47,10 +47,9 @@ export default async function createComment(
       pass: process.env.PASS
     }
   });
-  const testing = false;
   const mailOptions = {
     from: process.env.EMAIL,
-    to: testing ? 'yuming.tom.lu@gmail.com' : emails.map(item => item.subEmail).join(','),
+    bcc: emails.map(item => item.subEmail).join(','),
     subject: results.length === 1 ? `Check out the new post on Tom's Blog '${results[0].title}'` : `There's a bunch of new posts one Tom's Blog`,
     html: `
     <!doctype html>

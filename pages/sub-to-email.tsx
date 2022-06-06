@@ -68,7 +68,7 @@ export default function EmailVerification() {
             <h1 className='text-3xl mx-auto pt-4'>
               Please enter your email:
             </h1>
-            <p className='text-gray-500 text-sm pt-2 text-center'>Note: This will probably end up in your spam email and you need to tell your email account this is not spam</p>
+            <p className='text-gray-500 text-sm pt-2 text-center'>Note: This will probably end up in your spam email and you need to <span className='text-red-500'>tell your email account this is not spam</span></p>
             <p className='text-gray-500 text-sm pb-4 pt-2 text-center'>For the moment, emails will not be sent to anyone besides the verification email. I've not built the email subscription service yet 😐😐😐</p>
           </>
         }

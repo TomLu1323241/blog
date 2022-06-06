@@ -1,8 +1,7 @@
 name: Hourly cron job
 on:
   schedule:
-    - cron: '0 21 * * *'
-    # '0 19 * * 5' every Friday night at 7pm
+    - cron: '0 12 * * 6' # every saturday at 8am
 jobs:
   cron:
     runs-on: ubuntu-latest
