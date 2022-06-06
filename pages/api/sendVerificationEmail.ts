@@ -25,21 +25,27 @@ export default async function createComment(
   res: NextApiResponse<Data>
 ) {
   const body: Email = JSON.parse(req.body);
-  const checkIfEmailAlreadyExists = await sanityClient.fetch(`
+  const checkIfEmailAlreadyExists: { code: string, verified: boolean } = await sanityClient.fetch(`
   *[_type == "subEmail" && 
     subEmail == $email][0] {
-    code
+    code,
+    verified,
   }
   `, { email: body.email });
-  if (!checkIfEmailAlreadyExists) {
-    const code = makeID(6);
-    res.status(200).json({ name: 'John Doe' });
-    await sanityClient.create({
-      _type: 'subEmail',
-      verified: false,
-      subEmail: body.email,
-      code,
-    });
+  if (!checkIfEmailAlreadyExists || !checkIfEmailAlreadyExists.verified) {
+    let code;
+    if (!checkIfEmailAlreadyExists) {
+      code = makeID(6);
+      await sanityClient.create({
+        _type: 'subEmail',
+        verified: false,
+        subEmail: body.email,
+        code,
+      });
+    } else {
+      code = checkIfEmailAlreadyExists.code;
+    }
+    res.status(200).end();
     const transporter = nodemailer.createTransport({
       host: 'smtp.gmail.com',
       port: 465,
@@ -57,6 +63,6 @@ export default async function createComment(
     };
     await transporter.sendMail(mailOptions);
   } else {
-    res.status(402).json({ name: 'this email already exists' });
+    res.status(409).end();
   }
 }

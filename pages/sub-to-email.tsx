@@ -14,6 +14,7 @@ export default function EmailVerification() {
     register: registerEmail,
     handleSubmit: handleSubmitEmail,
     formState: { errors: errorsEmail },
+    setError: setErrorEmail,
   } = useForm<Email>();
   const onSummitEmail: SubmitHandler<Email> = async (data: Email) => {
     setEmail(data.email);
@@ -23,15 +24,15 @@ export default function EmailVerification() {
       body: JSON.stringify(data),
     });
     if (res.ok) {
-      console.log('submitted comment');
-    } else {
-      console.log(`${res.status} : ${res.statusText}`);
+      setSubmittedEmail(SubmittedProgress.Submitted);
+    } else if (res.status === 409) {
+      setSubmittedEmail(SubmittedProgress.NotSubmitted);
+      setErrorEmail('email', { type: 'custom', message: '- This email is already subscribed!' });
     }
-    setSubmittedEmail(SubmittedProgress.Submitted);
   };
 
   const [submittedCode, setSubmittedCode] = useState<SubmittedProgress>(SubmittedProgress.NotSubmitted);
-  const [codeError, setCodeError] = useState<boolean>(false);
+  const [codeError, setCodeError] = useState<string>('');
   const {
     register: registerCode,
     handleSubmit: handleSubmitCode,
@@ -39,8 +40,9 @@ export default function EmailVerification() {
     setValue: setValueCode,
   } = useForm<EmailCode>();
   const onSummitCode: SubmitHandler<EmailCode> = async (data: EmailCode) => {
-    if (codeError || data.code.length != 6) {
-      setCodeError(true);
+    console.log(data);
+    if (data.code.length != 6) {
+      setCodeError('- code must be 6 digits long');
       return;
     }
     setSubmittedCode(SubmittedProgress.Submitting);
@@ -50,8 +52,9 @@ export default function EmailVerification() {
     });
     if (res.ok) {
       setSubmittedCode(SubmittedProgress.Submitted);
-    } else {
-      console.log(`${res.status} : ${res.statusText}`);
+    } else if (res.status === 409) {
+      setSubmittedCode(SubmittedProgress.NotSubmitted);
+      setCodeError('- you have entered the incorrect code');
     }
   };
   return <>
@@ -82,7 +85,7 @@ export default function EmailVerification() {
               Send Verification Email
             </button>
             {errorsEmail.email && (
-              <span className='text-red-500'>- The Email field is required</span>
+              <span className='text-red-500'>{errorsEmail.email.message ? errorsEmail.email.message : '- The Email field is required'}</span>
             )}
           </form>
         }
@@ -113,9 +116,9 @@ export default function EmailVerification() {
                 validChars='[a-z|0-9]*'
                 placeholder='·'
                 onChange={(e) => {
-                  setValueCode('code', e);
-                  if (e.length === 6) {
-                    setCodeError(false);
+                  setValueCode('code', e.length < 6 ? e : e.substring(0, 6));
+                  if (e.length > 6) {
+                    setCodeError('');
                   }
                 }}
                 classNames={{
@@ -130,7 +133,7 @@ export default function EmailVerification() {
               Verify Email!
             </button>
             {codeError && (
-              <span className='text-red-500'>- The code is a 6 digit code, please try again</span>
+              <span className='text-red-500'>{codeError}</span>
             )}
           </form>
         }

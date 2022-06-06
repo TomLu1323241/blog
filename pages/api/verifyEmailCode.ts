@@ -23,11 +23,8 @@ export default async function createComment(
   `, { email: body.email });
   if (result.code === body.code) {
     res.status(200).end();
-    console.log('need to change to accept');
     await sanityClient.patch(result._id).set({ verified: true }).commit();
   } else {
-    res.status(418).end();
+    res.status(409).end();
   }
-  console.log(result);
-  console.log(body);
 }
