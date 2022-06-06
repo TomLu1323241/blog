@@ -9,4 +9,4 @@ jobs:
     steps:
       - name: Hourly cron job
         run: |
-          curl --GET --url 'https://www.tomlu.me/api/hello/emailSubs'
+          curl --GET --url 'https://www.tomlu.me/api/emailSubs'
