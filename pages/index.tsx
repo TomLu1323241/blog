@@ -56,7 +56,7 @@ export default function Home({ posts }: Props) {
                         weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
                       })}</p>
                     </div>
-                    <img className='h-12 w-12 rounded-full' src={urlFor(post.author.image).url()!} />
+                    <img className='w-12 h-12 rounded-full object-cover aspect-square' src={urlFor(post.author.image).url()!} />
                   </div>
                 </div>
               </a>
