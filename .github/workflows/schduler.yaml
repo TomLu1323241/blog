@@ -8,4 +8,4 @@ jobs:
     steps:
       - name: Hourly cron job
         run: |
-          curl --GET --url 'https://www.tomlu.me/api/emailSubs'
+          curl --GET --url 'https://www.tomlu.me/api/emailSubs' --header 'Authorization: Bearer ${{ secrets.SECRET_STRING }}'

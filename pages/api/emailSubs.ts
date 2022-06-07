@@ -11,6 +11,9 @@ export default async function createComment(
   req: NextApiRequest,
   res: NextApiResponse<Data>
 ) {
+  if (req.headers.authorization?.split(' ')[1] !== process.env.SECRET_STRING) {
+    res.status(418).end();
+  }
   let results: Post[] = await sanityClient.fetch(`
   *[_type == "post"] | order(_createdAt desc) {
     _createdAt,
