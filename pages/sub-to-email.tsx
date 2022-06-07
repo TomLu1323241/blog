@@ -9,7 +9,7 @@ import Link from 'next/link';
 
 export default function EmailVerification() {
   const [email, setEmail] = useState<string>('');
-  const [submittedEmail, setSubmittedEmail] = useState<SubmittedProgress>(SubmittedProgress.NotSubmitted); // TODO: change this
+  const [submittedEmail, setSubmittedEmail] = useState<SubmittedProgress>(SubmittedProgress.NotSubmitted);
   const {
     register: registerEmail,
     handleSubmit: handleSubmitEmail,

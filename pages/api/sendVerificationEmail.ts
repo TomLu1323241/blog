@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { Email } from '../../typings';
 import { sanityClient } from './sanity';
-import nodemailer from 'nodemailer';
+import { sendMail } from './sendMail';
 
 type Data = {
   name: string
@@ -43,30 +43,7 @@ export default async function sendVerificationEmail(
     } else {
       code = checkIfEmailAlreadyExists.code;
     }
-    const transporter = nodemailer.createTransport({
-      host: 'smtp.gmail.com',
-      port: 465,
-      secure: true,
-      auth: {
-        user: process.env.EMAIL,
-        pass: process.env.PASS
-      }
-    });
-    const mailOptions = {
-      from: process.env.EMAIL,
-      to: body.email,
-      subject: `Verification Code: ${code}`,
-      text: `Your verification code is ${code}`,
-    };
-    await new Promise((resolve, reject) => {
-      transporter.sendMail(mailOptions, (err, info) => {
-        if (err) {
-          reject(err);
-        } else {
-          resolve(info);
-        }
-      });
-    });
+    await sendMail(false, body.email, `Verification Code: ${code}`, true, `Your verification code is ${code}`);
     res.status(200).end();
   } else {
     res.status(409).end();

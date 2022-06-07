@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { Email, Post } from '../../typings';
 import { sanityClient, urlFor } from './sanity';
-import nodemailer from 'nodemailer';
+import { sendMail } from './sendMail';
 
 type Data = {
   name: string
@@ -41,20 +41,11 @@ export default async function createComment(
     subEmail,
   }
   `);
-  const transporter = nodemailer.createTransport({
-    host: 'smtp.gmail.com',
-    port: 465,
-    secure: true,
-    auth: {
-      user: process.env.EMAIL,
-      pass: process.env.PASS
-    }
-  });
-  const mailOptions = {
-    from: process.env.EMAIL,
-    bcc: emails.map(item => item.subEmail).join(','),
-    subject: results.length === 1 ? `Check out the new post on Tom's Blog '${results[0].title}'` : `There's a bunch of new posts one Tom's Blog`,
-    html: `
+  await sendMail(true,
+    emails.map(item => item.subEmail),
+    results.length === 1 ? `Check out the new post on Tom's Blog '${results[0].title}'` : `There's a bunch of new posts from Tom's Blog`,
+    false,
+    `
     <!doctype html>
     <html ⚡4email>
       <head>
@@ -62,22 +53,11 @@ export default async function createComment(
       </head>
       <body>
         ${results.map((item) => `
-          <a href='https://www.tomlu.me/post/${item.slug.current}'><h1 style='margin: 0px;'>${item.title}</h1></a>
-          <h6 style='margin: 0px;'>${item.description}</h6>
-          <img src='${urlFor(item.mainImage)}' style='object-fit: cover; width: 30rem; height: 20rem;'/>
+          <a href='https://www.tomlu.me/post/${item.slug.current}'>https://www.tomlu.me/post/${item.slug.current}</a><br>
         `).join('')}
       </body>
     </html>
-    `,
-  };
-  await new Promise((resolve, reject) => {
-    transporter.sendMail(mailOptions, (err, info) => {
-      if (err) {
-        reject(err);
-      } else {
-        resolve(info);
-      }
-    });
-  });
+    `
+  );
   res.status(200).end();
 }
