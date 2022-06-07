@@ -72,6 +72,7 @@ export default function EmailVerification() {
             <p className='text-gray-500 text-sm pb-4 pt-2 text-center'>Emails are sent out every Saturday at 8:00am informing you of that week's blog posts!</p>
           </>
         }
+
         {submittedEmail == SubmittedProgress.NotSubmitted &&
           <form onSubmit={handleSubmitEmail(onSummitEmail)}>
             <input
@@ -90,6 +91,7 @@ export default function EmailVerification() {
             )}
           </form>
         }
+
         {submittedEmail == SubmittedProgress.Submitting &&
           <img className='h-40 mx-auto' src={LoadingGifs[Math.floor(Math.random() * LoadingGifs.length)]} />
         }
@@ -113,7 +115,7 @@ export default function EmailVerification() {
             <div className='flex flex-row align-middle mx-auto justify-center'>
               <VerificationInput
                 removeDefaultStyles
-                validChars='[a-z|0-9]*'
+                validChars='[0-9]*'
                 placeholder='·'
                 onChange={(e) => {
                   setValueCode('code', e.length < 6 ? e : e.substring(0, 6));
