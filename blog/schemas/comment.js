@@ -31,6 +31,15 @@ export default {
       title: 'post.title',
       subtitle: 'author',
       media: 'post.mainImage.asset',
+      createdAt: '_createdAt',
+    },
+    prepare(selection) {
+      const { subtitle, createdAt } = selection
+      return Object.assign({}, selection, {
+        subtitle: `${subtitle} - ${(new Date(createdAt)).toLocaleDateString('en-US', {
+          weekday: 'short', month: 'short', day: '2-digit', hour12: true, hour: '2-digit', minute: '2-digit'
+        })}`
+      })
     },
   },
 }
