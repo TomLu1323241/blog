@@ -101,7 +101,7 @@ export default function EmailVerification() {
             <h1 className='text-3xl mx-auto pt-4 text-center'>
               Please check your email: <span className='text-gray-500'>{email}</span>
             </h1>
-            <p className='text-gray-500 text-sm pb-4 pt-2 text-center'>Note: This will probably end up in your spam email and you need to tell your email account this is not spam</p>
+            <p className='text-gray-500 text-sm pb-4 pt-2 text-center'>Note: This will probably end up in your spam email and <span className='text-red-500'>you need to tell your email account this is not spam</span></p>
           </>
         }
 
