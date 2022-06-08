@@ -47,16 +47,18 @@ export default function Home({ posts }: Props) {
             <Link key={post._id} href={`/post/${post.slug.current}`}>
               <a className='h-full'>
                 <div className='group cursor-pointer border rounded-lg overflow-hidden shadow-lg h-full'>
-                  <img className='h-60 w-full object-cover group-hover:scale-105 transition-transform duration-200 ease-in-out' src={urlFor(post.mainImage).url()!} />
+                  <div className='h-60 w-full relative'>
+                    <Image className='object-cover group-hover:scale-105 transition-transform duration-200 ease-in-out' src={urlFor(post.mainImage).url()!} layout='fill' />
+                  </div>
                   <div className='flex justify-between p-5 bg-white'>
-                    <div>
+                    <div className='basis-5/6'>
                       <p className='text-lg font-bold'>{post.title}</p>
                       <p className='text-xs'>{post.description}</p>
                       <p className='text-xs text-gray-400'>{new Date(post._createdAt).toLocaleString('en-US', {
                         weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
                       })}</p>
                     </div>
-                    <img className='w-12 h-12 rounded-full object-cover aspect-square' src={urlFor(post.author.image).url()!} />
+                    <Image className='rounded-full' src={urlFor(post.author.image).url()!} height={48} width={48} layout='fixed' objectFit='cover' />
                   </div>
                 </div>
               </a>
