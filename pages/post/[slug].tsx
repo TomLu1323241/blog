@@ -1,11 +1,8 @@
-import { url } from 'inspector';
 import { GetStaticProps } from 'next';
 import PortableText from 'react-portable-text';
 import Header from '../../components/header';
 import { sanityClient, urlFor } from '../../sanity';
-import { BlogComment, Post } from '../../typings';
-import { useForm, SubmitHandler } from 'react-hook-form';
-import { useState } from 'react';
+import { Post } from '../../typings';
 import Head from 'next/head';
 import Highlight from 'react-highlight';
 import 'highlight.js/styles/an-old-hope.css';

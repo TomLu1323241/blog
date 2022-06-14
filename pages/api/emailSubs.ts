@@ -42,6 +42,7 @@ export default async function createComment(
   }
   `);
   await sendMail(true,
+    // 'tom1323241@gmail.com',
     emails.map(item => item.subEmail),
     results.length === 1 ? `Check out the new post on Tom's Blog '${results[0].title}'` : `There's a bunch of new posts from Tom's Blog`,
     false,
@@ -55,6 +56,7 @@ export default async function createComment(
         ${results.map((item) => `
           <a href='https://www.tomlu.me/post/${item.slug.current}'>https://www.tomlu.me/post/${item.slug.current}</a><br>
         `).join('')}
+        <p>You can unsubscribe with this link <a href='https://www.tomlu.me/unsub'>https://www.tomlu.me/unsub</a></p>
       </body>
     </html>
     `
