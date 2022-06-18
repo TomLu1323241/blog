@@ -1,4 +1,4 @@
-name: Hourly cron job
+name: Hit endpoint to send out subscription emails
 on:
   schedule:
     - cron: '0 12 * * 6' # every saturday at 8am
@@ -6,6 +6,6 @@ jobs:
   cron:
     runs-on: ubuntu-latest
     steps:
-      - name: Hourly cron job
+      - name: Hit endpoint to send out subscription emails
         run: |
           curl --GET --url 'https://www.tomlu.me/api/emailSubs' --header 'Authorization: Bearer ${{ secrets.SECRET_STRING }}'
