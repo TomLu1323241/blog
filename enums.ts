@@ -3,3 +3,7 @@ export enum SubmittedProgress {
   Submitting,
   Submitted,
 }
+
+export enum ArchiveType {
+  reddit,
+}

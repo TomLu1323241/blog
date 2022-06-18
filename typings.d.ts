@@ -1,3 +1,4 @@
+import { ArchiveType } from './enums';
 export interface Post {
   _id: string;
   _createdAt: string;
@@ -37,4 +38,11 @@ export interface EmailCode {
 export interface Comment {
   author: string;
   comment: string;
+}
+
+export interface Archive {
+  src: string;
+  type: ArchiveType;
+  width: number;
+  height: number;
 }
