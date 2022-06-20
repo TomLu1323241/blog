@@ -11,6 +11,7 @@ export default async function unsubEmail(
   res: NextApiResponse<Data>
 ) {
   const body: Email = JSON.parse(req.body);
+  body.email = body.email.toLowerCase();
   const result: { _id: string, verified: boolean } = await sanityClient.fetch(`
   *[_type == "subEmail" && subEmail == $email][0] {
     _id,

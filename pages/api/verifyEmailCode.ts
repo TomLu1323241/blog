@@ -11,6 +11,7 @@ export default async function verifyEmailCode(
   res: NextApiResponse<Data>
 ) {
   const body: EmailCode = JSON.parse(req.body);
+  body.email = body.email.toLowerCase();
   const result: { _id: string, code: string } = await sanityClient.fetch(`
   *[_type == "subEmail" && 
     subEmail == $email][0] {
