@@ -44,8 +44,7 @@ export default function CommentSection({ post_id, comments }: Props) {
       >
         <h3 className='text-sm text-yellow-500'>Enjoy this article?</h3>
         <h3 className='text-3xl font-bold'>Leave a comment!</h3>
-        <hr className='max-w-4xl mx-auto border border-yellow-500' />
-        <hr className='max-w-4xl mt-2' />
+        <hr className='max-w-4xl mt-2 border border-yellow-500' />
 
         <input
           {...register('_id')}
