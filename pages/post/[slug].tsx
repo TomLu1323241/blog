@@ -61,7 +61,7 @@ export default function PostPage({ post, imageGroupAssets }: Props) {
     {/* Article */}
     <article className='px-5 md:px-10 max-w-7xl mx-auto'>
       <h1 className='text-3xl mt-5 mb-3'>{post.title}</h1>
-      <h2 className='text-xl font-light text-gray-500 mb-2'>{post.description}</h2>
+      <h2 className='text-xl font-light text-gray-500 mb-2 dark:text-gray-400'>{post.description}</h2>
       <div className='flex items-center gap-2'>
         <img className='h-12 w-12 rounded-full object-cover aspect-square' src={urlFor(post.author.image).url()} />
         <p className='font-extralight text-sm'>Blog post by <span className='text-green-500'>{post.author.name}</span> - Published at {new Date(post._createdAt).toLocaleString()}</p>

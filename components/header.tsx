@@ -28,12 +28,12 @@ function Header() {
         <Link href='/' passHref>
           <a>
             <img
-              className='w-44 object-contain cursor-pointer hidden md:inline-block'
+              className='w-44 object-contain cursor-pointer hidden md:inline-block dark:invert'
               src='/logo long.png'
               alt=''
             />
             <img
-              className='h-12 object-contain cursor-pointer inline-block md:hidden'
+              className='h-12 object-contain cursor-pointer inline-block md:hidden dark:invert'
               src='/logo.png'
               alt=''
             />
