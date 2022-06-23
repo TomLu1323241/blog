@@ -54,14 +54,14 @@ export default function CommentSection({ post_id, comments }: Props) {
         />
 
         <label className='block mb-5'>
-          <span className='text-gray-700'>Name</span>
+          <span className='text-gray-700 dark:text-gray-400'>Name</span>
           <input
             {...register('author', { required: true })}
             className='shadow border rounded py-2 px-3 form-input mt-1 block w-full ring-yellow-500 outline-none focus:ring' placeholder='Tom Lu'
             type='text' />
         </label>
         <label className='block mb-5'>
-          <span className='text-gray-700'>Comment</span>
+          <span className='text-gray-700 dark:text-gray-400'>Comment</span>
           <textarea
             {...register('comment', { required: true })}
             className='shadow border rounded py-2 px-3 form-textarea mt-1 block w-full ring-yellow-500 outline-none focus:ring' placeholder='Comment'

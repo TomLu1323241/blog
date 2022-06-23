@@ -124,7 +124,7 @@ export default function PostPage({ post, imageGroupAssets }: Props) {
                 <img className='w-full max-h-[32rem] object-contain py-5' src={urlFor(props.asset).url()} />
               ),
               blockquote: (props: any) => (
-                <div className='max-w-fit md:max-w-4xl md:w-fit mx-auto bg-grey-light rounded-lg shadow-md p-8 border'>
+                <div className='max-w-fit md:max-w-4xl md:w-fit mx-auto bg-grey-light rounded-lg shadow-md p-8 border dark:border-gray-600 dark:bg-gray-800 dark:shadow-gray-700'>
                   <h2 className='italic text-right text-blue-darkest leading-normal break-words'>
                     {props.children[0].split('-')[0].trim()}
                   </h2>
