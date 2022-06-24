@@ -52,7 +52,7 @@ export default function PostPage({ post, imageGroupAssets }: Props) {
     </Head>
     <Header />
     {/* Banner */}
-    <div className='flex items-center max-w-7xl mx-auto p-5'>
+    <div className='flex items-center max-w-7xl mx-auto pb-5'>
       <img
         className='w-full h-96 object-cover'
         src={urlFor(post.mainImage).url()}
@@ -61,7 +61,7 @@ export default function PostPage({ post, imageGroupAssets }: Props) {
     {/* Article */}
     <article className='px-5 md:px-10 max-w-7xl mx-auto'>
       <h1 className='text-3xl mt-5 mb-3'>{post.title}</h1>
-      <h2 className='text-xl font-light text-gray-500 mb-2'>{post.description}</h2>
+      <h2 className='text-xl font-light text-gray-500 mb-2 dark:text-gray-400'>{post.description}</h2>
       <div className='flex items-center gap-2'>
         <img className='h-12 w-12 rounded-full object-cover aspect-square' src={urlFor(post.author.image).url()} />
         <p className='font-extralight text-sm'>Blog post by <span className='text-green-500'>{post.author.name}</span> - Published at {new Date(post._createdAt).toLocaleString()}</p>
@@ -110,7 +110,7 @@ export default function PostPage({ post, imageGroupAssets }: Props) {
                 <h2 className='text-2xl font-bold my-3' {...props} />
               ),
               h3: (props: any) => (
-                <h3 className='text-lg md:text-xl font-bold my-1 text-gray-600' {...props} />
+                <h3 className='text-lg md:text-xl font-bold my-1 text-gray-600 dark:text-gray-400' {...props} />
               ),
               li: ({ children }: any) => (
                 <li className='ml-16 list-disc'> {children} </li>
@@ -124,7 +124,7 @@ export default function PostPage({ post, imageGroupAssets }: Props) {
                 <img className='w-full max-h-[32rem] object-contain py-5' src={urlFor(props.asset).url()} />
               ),
               blockquote: (props: any) => (
-                <div className='max-w-fit md:max-w-4xl md:w-fit mx-auto bg-grey-light rounded-lg shadow-md p-8 border'>
+                <div className='max-w-fit md:max-w-4xl md:w-fit mx-auto bg-grey-light rounded-lg shadow-md p-8 border dark:border-gray-600 dark:bg-gray-800 dark:shadow-gray-700'>
                   <h2 className='italic text-right text-blue-darkest leading-normal break-words'>
                     {props.children[0].split('-')[0].trim()}
                   </h2>

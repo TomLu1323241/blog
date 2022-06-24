@@ -24,7 +24,7 @@ export default function Home({ posts }: Props) {
       <Header />
 
       {/* Banner */}
-      <div className='flex justify-between items-center bg-yellow-400 border-y border-black py-10 lg:py-0'>
+      <div className='flex justify-between items-center bg-yellow-400 dark:bg-fuchsia-600 border-y border-black py-10 lg:py-0'>
         <div className='px-10 space-y-5'>
           <h1 className='text-6xl max-w-xl font-serif'>
             Welcome to <span className='underline decoration-4'>Tom</span>'s blog
@@ -34,7 +34,7 @@ export default function Home({ posts }: Props) {
           </h2>
         </div>
         <img
-          className='hidden md:inline-flex h-52 lg:h-96 pr-5'
+          className='hidden md:inline-flex h-52 lg:h-96 pr-5 dark:invert'
           src='/T.png'
           alt=''
         />
@@ -46,11 +46,11 @@ export default function Home({ posts }: Props) {
           return (
             <Link key={post._id} href={`/post/${post.slug.current}`}>
               <a className='h-full'>
-                <div className='group cursor-pointer border rounded-lg overflow-hidden shadow-lg h-full'>
+                <div className='group cursor-pointer border rounded-lg overflow-hidden shadow-lg h-full dark:border-gray-600 dark:shadow-gray-700'>
                   <div className='h-60 w-full relative'>
                     <Image className='object-cover group-hover:scale-105 transition-transform duration-200 ease-in-out' src={urlFor(post.mainImage).url()!} layout='fill' />
                   </div>
-                  <div className='flex justify-between p-5 bg-white'>
+                  <div className='flex justify-between p-5 bg-white dark:bg-gray-900'>
                     <div className='basis-5/6'>
                       <p className='text-lg font-bold'>{post.title}</p>
                       <p className='text-xs'>{post.description}</p>
