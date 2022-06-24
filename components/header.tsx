@@ -1,6 +1,26 @@
+import { useTheme } from 'next-themes';
 import Link from 'next/link';
+import { MoonIcon, SunIcon } from '@heroicons/react/solid';
+import { useEffect, useState } from 'react';
 
 function Header() {
+  const { systemTheme, theme, setTheme } = useTheme();
+  const [mounted, setMounted] = useState<boolean>(false);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+  const renderThemeChanger = () => {
+    if (!mounted) {
+      return;
+    }
+    const currentTheme = theme === 'system' ? systemTheme : theme;
+    if (currentTheme === 'dark') {
+      return <SunIcon className='h-8 text-yellow-300' onClick={() => setTheme('light')} />;
+    } else {
+      return <MoonIcon className='h-8 text-gray-700' onClick={() => setTheme('dark')} />;
+    }
+  };
+
   return (
     <header className='flex justify-between p-5 max-w-7xl mx-auto'>
 
@@ -8,8 +28,13 @@ function Header() {
         <Link href='/' passHref>
           <a>
             <img
-              className='w-44 object-contain cursor-pointer'
+              className='w-44 object-contain cursor-pointer hidden md:inline-block dark:invert'
               src='/logo long.png'
+              alt=''
+            />
+            <img
+              className='h-12 object-contain cursor-pointer inline-block md:hidden dark:invert'
+              src='/logo.png'
               alt=''
             />
           </a>
@@ -21,12 +46,13 @@ function Header() {
         </div>
       </div>
 
-      <div className='flex flex-col justify-center md:flex-row md:items-center md:space-x-5 text-green-600 '>
+      <div className='flex flex-row justify-center items-center space-x-5 text-green-600'>
         <Link href='/sub-to-email' passHref>
           <a>
             <h3 className='border px-2 md:px-4 py-1 rounded-full border-green-600 mx-auto: hover:bg-green-600 hover:text-white text-center'>Subscribe with email</h3>
           </a>
         </Link>
+        {renderThemeChanger()}
       </div>
 
     </header>

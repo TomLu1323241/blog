@@ -44,8 +44,7 @@ export default function CommentSection({ post_id, comments }: Props) {
       >
         <h3 className='text-sm text-yellow-500'>Enjoy this article?</h3>
         <h3 className='text-3xl font-bold'>Leave a comment!</h3>
-        <hr className='max-w-4xl mx-auto border border-yellow-500' />
-        <hr className='max-w-4xl mt-2' />
+        <hr className='max-w-4xl mt-2 border border-yellow-500' />
 
         <input
           {...register('_id')}
@@ -55,17 +54,17 @@ export default function CommentSection({ post_id, comments }: Props) {
         />
 
         <label className='block mb-5'>
-          <span className='text-gray-700'>Name</span>
+          <span className='text-gray-700 dark:text-gray-400'>Name</span>
           <input
             {...register('author', { required: true })}
-            className='shadow border rounded py-2 px-3 form-input mt-1 block w-full ring-yellow-500 outline-none focus:ring' placeholder='Tom Lu'
+            className='shadow border rounded py-2 px-3 form-input mt-1 block w-full ring-yellow-500 outline-none focus:ring dark:border-gray-500' placeholder='Tom Lu'
             type='text' />
         </label>
         <label className='block mb-5'>
-          <span className='text-gray-700'>Comment</span>
+          <span className='text-gray-700 dark:text-gray-400'>Comment</span>
           <textarea
             {...register('comment', { required: true })}
-            className='shadow border rounded py-2 px-3 form-textarea mt-1 block w-full ring-yellow-500 outline-none focus:ring' placeholder='Comment'
+            className='shadow border rounded py-2 px-3 form-textarea mt-1 block w-full ring-yellow-500 outline-none focus:ring dark:border-gray-500' placeholder='Comment'
             rows={8} />
         </label>
         <div className='flex flex-col p-5'>
