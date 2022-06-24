@@ -52,7 +52,7 @@ export default function PostPage({ post, imageGroupAssets }: Props) {
     </Head>
     <Header />
     {/* Banner */}
-    <div className='flex items-center max-w-7xl mx-auto p-5'>
+    <div className='flex items-center max-w-7xl mx-auto pb-5'>
       <img
         className='w-full h-96 object-cover'
         src={urlFor(post.mainImage).url()}
@@ -110,7 +110,7 @@ export default function PostPage({ post, imageGroupAssets }: Props) {
                 <h2 className='text-2xl font-bold my-3' {...props} />
               ),
               h3: (props: any) => (
-                <h3 className='text-lg md:text-xl font-bold my-1 text-gray-600' {...props} />
+                <h3 className='text-lg md:text-xl font-bold my-1 text-gray-600 dark:text-gray-400' {...props} />
               ),
               li: ({ children }: any) => (
                 <li className='ml-16 list-disc'> {children} </li>
