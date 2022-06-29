@@ -9,6 +9,20 @@ export default {
       type: 'string',
     },
     {
+      name: 'nsfw',
+      title: 'NSFW',
+      type: 'boolean',
+    },
+    {
+      name: 'slug',
+      title: 'Slug',
+      type: 'slug',
+      options: {
+        source: 'title',
+        maxLength: 96,
+      },
+    },
+    {
       name: 'body',
       title: 'Body',
       type: 'array',

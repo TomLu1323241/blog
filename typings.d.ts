@@ -13,9 +13,7 @@ export interface Post {
       url: string;
     };
   };
-  slug: {
-    current: string;
-  };
+  slug: Slug;
   body: object[];
   comment: Comment[];
 }
@@ -45,4 +43,9 @@ export interface Archive {
   type: ArchiveType;
   width: number;
   height: number;
+}
+
+export interface Slug {
+  current: string;
+  _type: string;
 }

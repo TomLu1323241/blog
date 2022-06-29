@@ -63,13 +63,14 @@ export const getStaticPaths = async () => {
     _id,
     _createdAt,
     title,
+    slug,
   }
   `;
   const imageTypes: any = await sanityClient.fetch(query);
 
   const paths = imageTypes.map((images: any) => ({
     params: {
-      archive: images.title,
+      archive: images.slug.current,
     }
   }));
 
@@ -81,7 +82,7 @@ export const getStaticPaths = async () => {
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   const query = `
-  *[_type == "archives" && title == $title][0] {
+  *[_type == "archives" && slug.current == $slug][0] {
     _id,
     _createdAt,
     title,
@@ -89,7 +90,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   }
   `;
   const images = await sanityClient.fetch(query, {
-    title: params?.archive,
+    slug: params?.archive,
   });
   if (!images) {
     return {
@@ -104,9 +105,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     const redditBody = await res.json();
     return {
       src: redditBody[0].data.children[0].data.url,
-      // type: ArchiveType.reddit,
-      width: Math.floor(Math.random() * 4 + 1),
-      height: Math.floor(Math.random() * 4 + 1),
+      type: ArchiveType.reddit,
     };
   }));
 

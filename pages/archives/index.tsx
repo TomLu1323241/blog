@@ -1,17 +1,18 @@
 import Link from 'next/link';
 import { sanityClient } from '../../sanity';
+import { Slug } from '../../typings';
 
 interface Props {
-  titles: string[]
+  pageInfo: { title: string, slug: Slug }[]
 }
 
-export default function Archives({ titles }: Props) {
+export default function Archives(props: Props) {
   return <>
     <h1>This is the archives page</h1>
-    {titles.map((item) => {
+    {props.pageInfo.map((item) => {
       return <>
-        <Link key={item} href={`/archives/${item}`} passHref>
-          <a className='text-2xl text-blue-500 underline' key={item}>{item}</a>
+        <Link key={`${item.slug.current}-link`} href={`/archives/${item.slug.current}`} passHref>
+          <a className='text-2xl text-blue-500 underline' key={`${item.slug.current}-a`}>{item.title}</a>
         </Link>
       </>;
     })}
@@ -22,13 +23,13 @@ export const getServerSideProps = async () => {
   const query = `
   *[_type == "archives"] {
     title,
+    slug,
   }
   `;
-  const titles: { title: string }[] = await sanityClient.fetch(query);
-  const titleArray = titles.map((item) => item.title);
+  const results: { title: string, slug: string }[] = await sanityClient.fetch(query);
   return {
     props: {
-      titles: titleArray,
+      pageInfo: results,
     }
   };
 };
