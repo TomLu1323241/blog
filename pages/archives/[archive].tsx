@@ -1,6 +1,5 @@
 import { GetStaticProps } from 'next';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import Gallery from 'react-photo-gallery-next';
 import Header from '../../components/header';
 import { ArchiveType } from '../../enums';
 import { sanityClient } from '../../sanity';
@@ -29,10 +28,6 @@ export default function Archives({ title, archives }: Props) {
       setPageHeight(pageHeightDiv.current['clientHeight']);
     }
   }, []);
-  const imageRender = useCallback((props) => {
-    console.log(props);
-    return <img className='object-cover p-4' src={props.photo.src} width={props.photo.width} height={props.photo.height} />;
-  }, []);
   // console.log(title);
   // console.log(archives);
   return <>
@@ -53,7 +48,11 @@ export default function Archives({ title, archives }: Props) {
           alt=''
         />
       </div>
-      <Gallery photos={archives} renderImage={imageRender} />
+    </div>
+    <div className='flex flex-wrap gap-4 md:mx-12' ref={pageHeightDiv}>
+      {archives.map((item: Archive) => {
+        return <img key={item.src} className='max-h-96 mx-auto object-contain hover:scale-125 transition-transform duration-200 ease-in-out' src={item.src} />;
+      })}
     </div>
   </>;
 }
