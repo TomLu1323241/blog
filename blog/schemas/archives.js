@@ -23,24 +23,14 @@ export default {
       },
     },
     {
-      name: 'body',
-      title: 'Body',
+      title: 'Links',
+      name: 'links',
       type: 'array',
-      of: [
-        {
-          title: 'Image URL',
-          name: 'urlObject',
-          type: 'object',
-          fields: [
-            {
-              title: 'URL',
-              name: 'urlField',
-              type: 'url'
-            }
-          ]
-        }
-      ],
-    },
+      of: [{ type: 'string' }],
+      options: {
+        layout: 'grid'
+      }
+    }
   ],
   preview: {
     select: {

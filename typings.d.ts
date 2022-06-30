@@ -40,9 +40,10 @@ export interface Comment {
 
 export interface Archive {
   src: string;
+  mediaSrc: string;
   type: ArchiveType;
-  width: number;
   height: number;
+  width: number;
 }
 
 export interface Slug {
