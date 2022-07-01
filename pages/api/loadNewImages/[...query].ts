@@ -2,7 +2,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { sanityClient } from '../sanity';
 import { Archive } from '../../../typings';
-import { linkToImages } from '../../shared functions/linkToImages';
+import { linkToImages } from '../../../shared functions/linkToImages';
 
 export default async function handler(
   req: NextApiRequest,

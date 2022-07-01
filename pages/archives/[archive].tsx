@@ -4,7 +4,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import Header from '../../components/header';
 import { sanityClient } from '../../sanity';
 import { Archive, LinkToAdd } from '../../typings';
-import { linkToImages } from '../shared functions/linkToImages';
+import { linkToImages } from '../../shared functions/linkToImages';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { SubmittedProgress } from '../../enums';
