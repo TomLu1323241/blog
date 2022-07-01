@@ -4,7 +4,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import Header from '../../components/header';
 import { sanityClient } from '../../sanity';
 import { Archive, LinkToAdd } from '../../typings';
-import { linkToImages } from '../linkToImages';
+import { linkToImages } from '../shared functions/linkToImages';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { SubmittedProgress } from '../../enums';
@@ -58,7 +58,7 @@ export default function Archives({ title, archives, slug }: Props) {
       const newArchive: Archive[] = await res.json();
       setImages(images => [...newArchive, ...images]);
       setFetchSize(fetchSize + newArchive.length);
-      reset({link: ''});
+      reset({ link: '' });
     } else {
       setSubmitted(SubmittedProgress.NotSubmitted);
       // Some kinda error for the user

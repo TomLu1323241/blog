@@ -1,6 +1,6 @@
-import { Archive } from '../typings';
+import { Archive } from '../../typings';
 import probe from 'probe-image-size';
-import { ArchiveType } from '../enums';
+import { ArchiveType } from '../../enums';
 
 export async function linkToImages(links: string[]): Promise<Archive[]> {
   // the map returns an array of arrays of Archive objects, it is an array of array because a link can be a gallery of images
