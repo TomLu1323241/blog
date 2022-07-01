@@ -3,7 +3,7 @@ import probe from 'probe-image-size';
 import { ArchiveType } from '../enums';
 
 export async function linkToImages(links: string[]): Promise<Archive[]> {
-  // the map returns an array of array of Archive objects, it is an array of array because a link can be a gallery of images
+  // the map returns an array of arrays of Archive objects, it is an array of array because a link can be a gallery of images
   // the ... converts the array of arrays into a bunch of separate arrays
   // the concat combines everything into one array of objects
   // this is done to keep order

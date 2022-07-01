@@ -40,6 +40,7 @@ export default function Archives({ title, archives, slug }: Props) {
     register,
     handleSubmit,
     setValue,
+    reset,
     formState: { errors },
   } = useForm<LinkToAdd>();
   const [submitted, setSubmitted] = useState<SubmittedProgress>(SubmittedProgress.NotSubmitted);
@@ -54,7 +55,10 @@ export default function Archives({ title, archives, slug }: Props) {
     });
     if (res.ok) {
       setSubmitted(SubmittedProgress.NotSubmitted);
-      // TODO: add image to client
+      const newArchive: Archive[] = await res.json();
+      setImages(images => [...newArchive, ...images]);
+      setFetchSize(fetchSize + newArchive.length);
+      reset({link: ''});
     } else {
       setSubmitted(SubmittedProgress.NotSubmitted);
       // Some kinda error for the user
