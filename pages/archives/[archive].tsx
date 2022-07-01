@@ -1,42 +1,44 @@
 import { GetStaticProps } from 'next';
 import Head from 'next/head';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import Header from '../../components/header';
-import { ArchiveType } from '../../enums';
 import { sanityClient } from '../../sanity';
 import { Archive } from '../../typings';
-import probe from 'probe-image-size';
+import { linkToImages } from '../linkToImages';
+import InfiniteScroll from 'react-infinite-scroll-component';
 
 interface Props {
   title: string;
   archives: Archive[];
+  slug: string;
 }
 
-export default function Archives({ title, archives }: Props) {
-  console.log(archives.map(item => item.mediaSrc));
+const initialImageLoad = 10;
+
+export default function Archives({ title, archives, slug }: Props) {
+  // console.log(archives.map(item => item.mediaSrc));
   /*
   TODO: set the useRefs for the columns
   TODO: load images programmatically dependent on height
   */
-  const [pageHeight, setPageHeight] = useState<number>(0);
-  const pageHeightDiv = useRef(null);
-  useEffect(() => {
-    window.addEventListener('resize', () => {
-      if (pageHeightDiv.current) {
-        setPageHeight(pageHeightDiv.current['clientHeight']);
-      }
-    });
-    if (pageHeightDiv.current) {
-      setPageHeight(pageHeightDiv.current['clientHeight']);
+  const [images, setImages] = useState<Archive[]>(archives);
+  const [fetchSize, setFetchSize] = useState<number>(initialImageLoad);
+  const [hasMoreImages, setHasMoreImages] = useState<boolean>(archives.length >= initialImageLoad);
+  const loadMoreImages = async () => {
+    const res = await fetch(`/api/loadNewImages/${slug}/${fetchSize}`);
+    setFetchSize(fetchSize + 10);
+    if (res.ok) {
+      const resJson: Archive[] = await res.json();
+      setImages(images => [...images, ...resJson]);
+    } else {
+      setHasMoreImages(false);
     }
-  }, []);
-  // console.log(title);
-  // console.log(archives);
+  };
   return <>
     <Head>
       <title>{title}</title>
     </Head>
-    <div className='max-w-7xl mx-auto' ref={pageHeightDiv}>
+    <div className='max-w-7xl mx-auto' >
       <Header />
       <div className='flex justify-between items-center bg-yellow-400 py-10 lg:py-0'>
         <div className='px-10 space-y-5'>
@@ -44,7 +46,7 @@ export default function Archives({ title, archives }: Props) {
             {title}
           </h1>
           <h2>
-            Some details about {title} Height : {pageHeight}!!!
+            Some details about {title}
           </h2>
         </div>
         <img
@@ -64,13 +66,25 @@ export default function Archives({ title, archives }: Props) {
         </button>
       </form>
     </div>
-    <div className='flex flex-wrap gap-4 md:mx-12' ref={pageHeightDiv}>
-      {archives.map((item: Archive) => {
+    <InfiniteScroll
+      dataLength={images.length}
+      next={loadMoreImages}
+      loader={<img className='h-96 mx-auto hover:scale-125 transition-transform duration-200 ease-in-out' src='/loading-circles.gif' />}
+      hasMore={hasMoreImages}
+      className='flex flex-wrap gap-4 md:mx-12 overflow-y-auto'
+    >
+      {images.map((item: Archive) => {
+        const multiplier = 384 / item.height;
+        return <img key={item.mediaSrc} height={item.height * multiplier} width={item.width * multiplier} className='mx-auto hover:scale-125 transition-transform duration-200 ease-in-out' src={item.mediaSrc} loading='lazy' />;
+      })}
+    </InfiniteScroll>
+    {/* <div className='flex flex-wrap gap-4 md:mx-12 overflow-y-auto'>
+      {images.map((item: Archive) => {
         const multiplier = 384 / item.height;
         return <img key={item.mediaSrc} height={item.height * multiplier} width={item.width * multiplier} className='mx-auto hover:scale-125 transition-transform duration-200 ease-in-out' src={item.mediaSrc} loading='lazy' />;
       })}
       <img className='h-96 mx-auto hover:scale-125 transition-transform duration-200 ease-in-out' src='/loading-circles.gif' />
-    </div>
+    </div> */}
   </>;
 }
 
@@ -103,7 +117,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     _id,
     _createdAt,
     title,
-    links,
+    links[0...${initialImageLoad}],
   }
   `;
   const images = await sanityClient.fetch(query, {
@@ -114,49 +128,11 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
       notFound: true,
     };
   }
-
-  // the map returns an array of array of Archive objects, it is an array of array because a link can be a gallery of images
-  // the ... converts the array of arrays into a bunch of separate arrays
-  // the concat combines everything into one array of objects
-  // this is done to keep order
-  const baseURL = 'https://i.redd.it/';
-  const archives: Archive[] = [].concat(...await Promise.all(images.links.map(async (link: any) => {
-    // Assume its a reddit url
-    const res = await fetch(`${link.slice(0, -1)}.json`);
-    const redditBody = await res.json();
-    if (redditBody[0].data.children[0].data.url.includes('gallery')) {
-      const data = redditBody[0].data.children[0].data.media_metadata;
-      const temp = [];
-      for (const key of Object.keys(data)) {
-        const mediaSrc = `${baseURL}${key}.${data[key].m.split('/')[1]}`;
-        const imageDetails = await probe(mediaSrc);
-        temp.push({
-          src: link,
-          mediaSrc,
-          type: ArchiveType.reddit,
-          height: imageDetails.height,
-          width: imageDetails.width,
-        });
-      }
-      return temp;
-    } else {
-      const mediaSrc = redditBody[0].data.children[0].data.url;
-      const imageDetails = await probe(mediaSrc);
-      return [
-        {
-          src: link,
-          mediaSrc,
-          type: ArchiveType.reddit,
-          height: imageDetails.height,
-          width: imageDetails.width,
-        }
-      ];
-    }
-  })));
-  archives.reverse();
+  const archives: Archive[] = await linkToImages(images.links);
   return {
     props: {
       title: images.title,
+      slug: params?.archive,
       archives,
     },
     revalidate: 60,
