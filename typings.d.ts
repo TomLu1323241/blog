@@ -46,6 +46,11 @@ export interface Archive {
   width: number;
 }
 
+export interface LinkToAdd {
+  slug: string;
+  link: string;
+}
+
 export interface Slug {
   current: string;
   _type: string;

@@ -3,9 +3,11 @@ import Head from 'next/head';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import Header from '../../components/header';
 import { sanityClient } from '../../sanity';
-import { Archive } from '../../typings';
+import { Archive, LinkToAdd } from '../../typings';
 import { linkToImages } from '../linkToImages';
 import InfiniteScroll from 'react-infinite-scroll-component';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import { SubmittedProgress } from '../../enums';
 
 interface Props {
   title: string;
@@ -17,10 +19,8 @@ const initialImageLoad = 10;
 
 export default function Archives({ title, archives, slug }: Props) {
   // console.log(archives.map(item => item.mediaSrc));
-  /*
-  TODO: set the useRefs for the columns
-  TODO: load images programmatically dependent on height
-  */
+
+  // load new images
   const [images, setImages] = useState<Archive[]>(archives);
   const [fetchSize, setFetchSize] = useState<number>(initialImageLoad);
   const [hasMoreImages, setHasMoreImages] = useState<boolean>(archives.length >= initialImageLoad);
@@ -34,6 +34,33 @@ export default function Archives({ title, archives, slug }: Props) {
       setHasMoreImages(false);
     }
   };
+
+  // add images
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    formState: { errors },
+  } = useForm<LinkToAdd>();
+  const [submitted, setSubmitted] = useState<SubmittedProgress>(SubmittedProgress.NotSubmitted);
+  const onSubmit: SubmitHandler<LinkToAdd> = async (data: LinkToAdd) => {
+    if (submitted !== SubmittedProgress.NotSubmitted) {
+      return;
+    }
+    setSubmitted(SubmittedProgress.Submitting);
+    const res = await fetch('/api/addLink', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+    if (res.ok) {
+      setSubmitted(SubmittedProgress.NotSubmitted);
+      // TODO: add image to client
+    } else {
+      setSubmitted(SubmittedProgress.NotSubmitted);
+      // Some kinda error for the user
+    }
+  };
+  setValue('slug', slug);
   return <>
     <Head>
       <title>{title}</title>
@@ -55,8 +82,9 @@ export default function Archives({ title, archives, slug }: Props) {
           alt=''
         />
       </div>
-      <form className='flex flex-row justify-evenly bg-yellow-400 py-2'>
+      <form className='flex flex-row justify-evenly bg-yellow-400 py-2' onSubmit={handleSubmit(onSubmit)}>
         <input
+          {...register('link')}
           placeholder='https://www.reddit.com/r/HuTao_Mains/comments/vbym4y/hu_tao_plays_guitar_now/'
           className='shadow border rounded px-4 py-2 w-96 ring-yellow-500 outline-none focus:ring' />
         <button
@@ -79,13 +107,6 @@ export default function Archives({ title, archives, slug }: Props) {
         return <img key={item.mediaSrc} height={item.height * multiplier} width={item.width * multiplier} className='mx-auto hover:scale-125 transition-transform duration-200 ease-in-out' src={item.mediaSrc} loading='lazy' />;
       })}
     </InfiniteScroll>
-    {/* <div className='flex flex-wrap gap-4 md:mx-12 overflow-y-auto'>
-      {images.map((item: Archive) => {
-        const multiplier = 384 / item.height;
-        return <img key={item.mediaSrc} height={item.height * multiplier} width={item.width * multiplier} className='mx-auto hover:scale-125 transition-transform duration-200 ease-in-out' src={item.mediaSrc} loading='lazy' />;
-      })}
-      <img className='h-96 mx-auto hover:scale-125 transition-transform duration-200 ease-in-out' src='/loading-circles.gif' />
-    </div> */}
   </>;
 }
 
