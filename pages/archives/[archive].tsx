@@ -13,23 +13,22 @@ interface Props {
   title: string;
   archives: Archive[];
   slug: string;
+  size: number
 }
 
-const initialImageLoad = 10;
-
-export default function Archives({ title, archives, slug }: Props) {
+export default function Archives({ title, archives, slug, size }: Props) {
   // console.log(archives.map(item => item.mediaSrc));
 
   // load new images
   const [images, setImages] = useState<Archive[]>(archives);
-  const [fetchSize, setFetchSize] = useState<number>(initialImageLoad);
-  const [hasMoreImages, setHasMoreImages] = useState<boolean>(archives.length >= initialImageLoad);
+  const [fetchSize, setFetchSize] = useState<number>(size);
+  const [hasMoreImages, setHasMoreImages] = useState<boolean>(true);
   const loadMoreImages = async () => {
     const res = await fetch(`/api/loadNewImages/${slug}/${fetchSize}`);
-    setFetchSize(fetchSize + 10);
     if (res.ok) {
-      const resJson: Archive[] = await res.json();
+      const [resJson, size]: [Archive[], number] = await res.json();
       setImages(images => [...images, ...resJson]);
+      setFetchSize(fetchSize + size);
     } else {
       setHasMoreImages(false);
     }
@@ -103,8 +102,8 @@ export default function Archives({ title, archives, slug }: Props) {
       next={loadMoreImages}
       loader={<img className='h-96 mx-auto hover:scale-125 transition-transform duration-200 ease-in-out' src='/loading-circles.gif' />}
       hasMore={hasMoreImages}
-      className='flex flex-wrap gap-4 md:mx-12 overflow-visible'
-      style={{ overflow: 'visible' }}
+      className='flex flex-wrap gap-4 md:mx-12'
+    // style={{ overflow: 'visible' }}
     >
       {images.map((item: Archive) => {
         const multiplier = 384 / item.height;
@@ -143,7 +142,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     _id,
     _createdAt,
     title,
-    links[0...${initialImageLoad}],
+    links[0...${10}],
   }
   `;
   const images = await sanityClient.fetch(query, {
@@ -154,12 +153,17 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
       notFound: true,
     };
   }
-  const archives: Archive[] = await linkToImages(images.links);
+  const [archives, badEntries]: [Archive[], number[]] = await linkToImages(images.links);
+  await Promise.all(badEntries.map(async (indexToRemove) => {
+    await sanityClient.patch(images._id).splice('links', indexToRemove, 1, []).commit();
+  }));
+  console.log(badEntries);
   return {
     props: {
       title: images.title,
       slug: params?.archive,
       archives,
+      size: 10 - badEntries.length,
     },
     revalidate: 60,
   };
