@@ -56,7 +56,7 @@ export default function Archives({ title, archives, slug, size }: Props) {
       setSubmitted(SubmittedProgress.NotSubmitted);
       const newArchive: Archive[] = await res.json();
       setImages(images => [...newArchive, ...images]);
-      setFetchSize(fetchSize + newArchive.length);
+      setFetchSize(fetchSize + 1);
       reset({ link: '' });
     } else {
       setSubmitted(SubmittedProgress.NotSubmitted);
@@ -103,7 +103,7 @@ export default function Archives({ title, archives, slug, size }: Props) {
       loader={<img className='h-96 mx-auto hover:scale-125 transition-transform duration-200 ease-in-out' src='/loading-circles.gif' />}
       hasMore={hasMoreImages}
       className='flex flex-wrap gap-4 md:mx-12'
-    // style={{ overflow: 'visible' }}
+      style={{ overflow: 'visible' }}
     >
       {images.map((item: Archive) => {
         const multiplier = 384 / item.height;

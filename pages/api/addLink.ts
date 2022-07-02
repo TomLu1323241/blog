@@ -18,11 +18,11 @@ export default async function addLink(
     res.status(416).end();
     return;
   } else {
-    if (body.link.toLowerCase().includes('reddit')) {
+    if (body.link.toLowerCase().includes('reddit') && body.link.includes('?')) {
       body.link = body.link.substring(0, body.link.indexOf('?'));
     }
     await sanityClient.patch(queryResult._id).prepend('links', [body.link]).commit();
-    const newArchives: Archive[] = await linkToImages([body.link]);
+    const newArchives: Archive[] = (await linkToImages([body.link]))[0];
     res.status(200).json(newArchives);
     return;
   }
