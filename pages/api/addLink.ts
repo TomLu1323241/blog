@@ -1,11 +1,11 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { Archive, LinkToAdd } from '../../typings';
+import { Media, LinkToAdd } from '../../typings';
 import { sanityClient } from './sanity';
 import { linkToImages } from './linkToImagesBack';
 
 export default async function addLink(
   req: NextApiRequest,
-  res: NextApiResponse<Archive[]>
+  res: NextApiResponse<Media[]>
 ) {
   const body: LinkToAdd = JSON.parse(req.body);
   const queryResult: { _id: string, contains: boolean } = await sanityClient.fetch(`
@@ -22,7 +22,7 @@ export default async function addLink(
       body.link = body.link.substring(0, body.link.indexOf('?'));
     }
     await sanityClient.patch(queryResult._id).prepend('links', [body.link]).commit();
-    const newArchives: Archive[] = (await linkToImages([body.link]))[0];
+    const newArchives: Media[] = (await linkToImages([body.link]))[0];
     res.status(200).json(newArchives);
     return;
   }

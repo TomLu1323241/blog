@@ -1,16 +1,16 @@
-import { Archive } from './typings';
+import { Media } from './typings';
 import probe from 'probe-image-size';
 import { ArchiveType } from './enums';
 
 // WHEN YOU CHANGE THIS YOU ALSO NEED TO CHANGE THE BACKEND AS WELL
-export async function linkToImages(links: string[]): Promise<[Archive[], number[]]> {
+export async function linkToImages(links: string[]): Promise<[Media[], number[]]> {
   // the map returns an array of arrays of Archive objects, it is an array of array because a link can be a gallery of images
   // the ... converts the array of arrays into a bunch of separate arrays
   // the concat combines everything into one array of objects
   // this is done to keep order
   const badEntries: number[] = [];
   const baseURL = 'https://i.redd.it/';
-  const archives: Archive[] = ([] as Archive[]).concat(...await Promise.all<Archive[]>(links.map(async (link: string, index: number) => {
+  const archives: Media[] = ([] as Media[]).concat(...await Promise.all<Media[]>(links.map(async (link: string, index: number) => {
     // Assume its a reddit url
     if (link.toLocaleLowerCase().includes('reddit')) {
       const res = await fetch(`${link.slice(0, -1)}.json`);

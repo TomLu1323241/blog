@@ -1,3 +1,4 @@
+import { GetStaticProps } from 'next';
 import Link from 'next/link';
 import { sanityClient } from '../../sanity';
 import { Slug } from '../../typings';
@@ -6,20 +7,21 @@ interface Props {
   pageInfo: { title: string, slug: Slug }[]
 }
 
-export default function Archives(props: Props) {
+export default function Archives({ pageInfo }: Props) {
+  console.log(pageInfo);
   return <>
     <h1>This is the archives page</h1>
-    {props.pageInfo.map((item) => {
-      return <>
-        <Link key={`${item.slug.current}-link`} href={`/archives/${item.slug.current}`} passHref>
-          <a className='text-2xl text-blue-500 underline' key={`${item.slug.current}-a`}>{item.title}</a>
+    {pageInfo.map((item, index) => {
+      return <div key={`${index}-div`}>
+        <Link href={`/archives/${item.slug.current}`} passHref>
+          <a className='text-2xl text-blue-500 underline' >{item.title}</a>
         </Link>
-      </>;
+      </div>;
     })}
   </>;
 }
 
-export const getServerSideProps = async () => {
+export const getStaticProps: GetStaticProps = async () => {
   const query = `
   *[_type == "archives"] {
     title,
@@ -30,6 +32,7 @@ export const getServerSideProps = async () => {
   return {
     props: {
       pageInfo: results,
-    }
+    },
+    revalidate: 60,
   };
 };

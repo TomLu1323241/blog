@@ -1,9 +1,9 @@
-import { GetStaticProps } from 'next';
+import { GetServerSideProps, GetStaticProps } from 'next';
 import Head from 'next/head';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import Header from '../../components/header';
 import { sanityClient } from '../../sanity';
-import { Archive, LinkToAdd } from '../../typings';
+import { Media, LinkToAdd } from '../../typings';
 import { linkToImages } from '../../linkToImagesFront';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { SubmitHandler, useForm } from 'react-hook-form';
@@ -11,7 +11,7 @@ import { SubmittedProgress } from '../../enums';
 
 interface Props {
   title: string;
-  archives: Archive[];
+  archives: Media[];
   slug: string;
   size: number
 }
@@ -20,13 +20,13 @@ export default function Archives({ title, archives, slug, size }: Props) {
   // console.log(archives.map(item => item.mediaSrc));
 
   // load new images
-  const [images, setImages] = useState<Archive[]>(archives);
+  const [images, setImages] = useState<Media[]>(archives);
   const [fetchSize, setFetchSize] = useState<number>(size);
   const [hasMoreImages, setHasMoreImages] = useState<boolean>(true);
   const loadMoreImages = async () => {
     const res = await fetch(`/api/loadNewImages/${slug}/${fetchSize}`);
     if (res.ok) {
-      const [resJson, size]: [Archive[], number] = await res.json();
+      const [resJson, size]: [Media[], number] = await res.json();
       setImages(images => [...images, ...resJson]);
       setFetchSize(fetchSize + size);
     } else {
@@ -54,7 +54,7 @@ export default function Archives({ title, archives, slug, size }: Props) {
     });
     if (res.ok) {
       setSubmitted(SubmittedProgress.NotSubmitted);
-      const newArchive: Archive[] = await res.json();
+      const newArchive: Media[] = await res.json();
       setImages(images => [...newArchive, ...images]);
       setFetchSize(fetchSize + 1);
       reset({ link: '' });
@@ -105,7 +105,7 @@ export default function Archives({ title, archives, slug, size }: Props) {
       className='flex flex-wrap gap-4 md:mx-12'
       style={{ overflow: 'visible' }}
     >
-      {images.map((item: Archive) => {
+      {images.map((item: Media) => {
         const multiplier = 384 / item.height;
         return <img key={item.mediaSrc} height={item.height * multiplier} width={item.width * multiplier} className='mx-auto hover:scale-125 transition-transform duration-200 ease-in-out' src={item.mediaSrc} loading='lazy' />;
       })}
@@ -113,30 +113,7 @@ export default function Archives({ title, archives, slug, size }: Props) {
   </>;
 }
 
-export const getStaticPaths = async () => {
-  const query = `
-  *[_type == "archives"] {
-    _id,
-    _createdAt,
-    title,
-    slug,
-  }
-  `;
-  const imageTypes: any = await sanityClient.fetch(query);
-
-  const paths = imageTypes.map((images: any) => ({
-    params: {
-      archive: images.slug.current,
-    }
-  }));
-
-  return {
-    paths,
-    fallback: 'blocking',
-  };
-};
-
-export const getStaticProps: GetStaticProps = async ({ params }) => {
+export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   const query = `
   *[_type == "archives" && slug.current == $slug][0] {
     _id,
@@ -146,14 +123,14 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   }
   `;
   const images = await sanityClient.fetch(query, {
-    slug: params?.archive,
+    slug: params?.slug,
   });
   if (!images) {
     return {
       notFound: true,
     };
   }
-  const [archives, badEntries]: [Archive[], number[]] = await linkToImages(images.links);
+  const [archives, badEntries]: [Media[], number[]] = await linkToImages(images.links);
   await Promise.all(badEntries.map(async (indexToRemove) => {
     await sanityClient.patch(images._id).splice('links', indexToRemove, 1, []).commit();
   }));
@@ -161,10 +138,9 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   return {
     props: {
       title: images.title,
-      slug: params?.archive,
+      slug: params?.slug,
       archives,
       size: 10 - badEntries.length,
-    },
-    revalidate: 60,
+    }
   };
 };

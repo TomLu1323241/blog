@@ -38,7 +38,7 @@ export interface Comment {
   comment: string;
 }
 
-export interface Archive {
+export interface Media {
   src: string;
   mediaSrc: string;
   type: ArchiveType;
