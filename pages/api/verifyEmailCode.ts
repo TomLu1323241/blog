@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { EmailCode } from '../../typings';
+import { EmailCode } from '../../shared/typings';
 import { sanityClient } from './sanity';
 
 type Data = {

@@ -1,8 +1,8 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { sanityClient } from '../sanity';
-import { Media } from '../../../typings';
-import { linkToImages } from '../../../linkToImages';
+import { Media } from '../../../shared/typings';
+import { linkToImages } from '../../../shared/linkToImages';
 
 export default async function handler(
   req: NextApiRequest,

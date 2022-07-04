@@ -2,13 +2,13 @@ import { GetServerSideProps, GetStaticProps } from 'next';
 import Head from 'next/head';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import Header from '../../components/header';
-import { sanityClient } from '../../sanity';
-import { Media, LinkToAdd } from '../../typings';
-import { linkToImages } from '../../linkToImages';
+import { sanityClient } from '../../shared/sanity';
+import { Media, LinkToAdd } from '../../shared/typings';
+import { linkToImages } from '../../shared/linkToImages';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { SubmittedProgress } from '../../enums';
-import { LoadingGifs } from '../../consts';
+import { SubmittedProgress } from '../../shared/enums';
+import { LoadingGifs } from '../../shared/consts';
 
 interface Props {
   title: string;

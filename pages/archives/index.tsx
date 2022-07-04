@@ -1,7 +1,7 @@
 import { GetStaticProps } from 'next';
 import Link from 'next/link';
-import { sanityClient } from '../../sanity';
-import { Slug } from '../../typings';
+import { sanityClient } from '../../shared/sanity';
+import { Slug } from '../../shared/typings';
 
 interface Props {
   pageInfo: { title: string, slug: Slug }[]

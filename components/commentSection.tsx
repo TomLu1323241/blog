@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { BlogComment, Comment } from '../typings';
-import { SubmittedProgress } from '../enums';
+import { BlogComment, Comment } from '../shared/typings';
+import { SubmittedProgress } from '../shared/enums';
 
 interface Props {
   post_id: string;
