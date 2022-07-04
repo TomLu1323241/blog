@@ -119,8 +119,8 @@ export default function Archives({ title, archives, slug, size }: Props) {
       next={loadMoreImages}
       loader={<img className='h-96 mx-auto hover:scale-125 transition-transform duration-200 ease-in-out' src='/loading-circles.gif' />}
       hasMore={hasMoreImages}
-      className='flex flex-wrap gap-4 md:mx-12'
-      style={{ overflow: 'visible' }}
+      className='flex flex-wrap gap-4 md:mx-12 w-screen'
+      style={{ overflow: 'clip' }}
     >
       {images.map((item: Media) => {
         const multiplier = 384 / item.height;
