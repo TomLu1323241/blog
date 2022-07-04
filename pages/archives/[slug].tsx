@@ -8,6 +8,7 @@ import { linkToImages } from '../../linkToImagesFront';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { SubmittedProgress } from '../../enums';
+import { LoadingGifs } from '../../consts';
 
 interface Props {
   title: string;
@@ -42,24 +43,24 @@ export default function Archives({ title, archives, slug, size }: Props) {
     reset,
     formState: { errors },
   } = useForm<LinkToAdd>();
-  const [submitted, setSubmitted] = useState<SubmittedProgress>(SubmittedProgress.NotSubmitted);
+  const [submittingImage, setSubmittingImage] = useState<SubmittedProgress>(SubmittedProgress.NotSubmitted);
   const onSubmit: SubmitHandler<LinkToAdd> = async (data: LinkToAdd) => {
-    if (submitted !== SubmittedProgress.NotSubmitted) {
+    if (submittingImage !== SubmittedProgress.NotSubmitted) {
       return;
     }
-    setSubmitted(SubmittedProgress.Submitting);
+    setSubmittingImage(SubmittedProgress.Submitting);
     const res = await fetch('/api/addLink', {
       method: 'POST',
       body: JSON.stringify(data),
     });
     if (res.ok) {
-      setSubmitted(SubmittedProgress.NotSubmitted);
+      setSubmittingImage(SubmittedProgress.NotSubmitted);
       const newArchive: Media[] = await res.json();
       setImages(images => [...newArchive, ...images]);
       setFetchSize(fetchSize + 1);
       reset({ link: '' });
     } else {
-      setSubmitted(SubmittedProgress.NotSubmitted);
+      setSubmittingImage(SubmittedProgress.NotSubmitted);
       // Some kinda error for the user
     }
   };
@@ -85,16 +86,32 @@ export default function Archives({ title, archives, slug, size }: Props) {
           alt=''
         />
       </div>
-      <form className='flex flex-row justify-evenly bg-yellow-400 py-2' onSubmit={handleSubmit(onSubmit)}>
+      <form className='flex flex-col gap-y-3 md:flex-row justify-evenly bg-yellow-400 py-2' onSubmit={handleSubmit(onSubmit)}>
         <input
           {...register('link')}
           placeholder='https://www.reddit.com/r/HuTao_Mains/comments/vbym4y/hu_tao_plays_guitar_now/'
-          className='shadow border rounded px-4 py-2 w-96 ring-yellow-500 outline-none focus:ring' />
-        <button
-          type='submit'
-          className='shadow bg-yellow-500 hover:bg-yellow-400 focus:shadow-outline focus:outline-none text-white font-bold px-4 py-2 rounded cursor-pointer w-fit'>
-          Add Link
-        </button>
+          className='shadow border rounded px-4 py-2 mx-8 w-fill md:w-96 ring-yellow-500 outline-none focus:ring md:mx-0' />
+        <div className='flex flex-row justify-evenly md:gap-12'>
+          {submittingImage === SubmittedProgress.NotSubmitted &&
+            <button
+              type='submit'
+              className='shadow bg-yellow-500 hover:bg-yellow-400 focus:shadow-outline focus:outline-none text-white font-bold px-4 py-2 rounded cursor-pointer w-fit'>
+              Add Link
+            </button>
+          }
+          {submittingImage === SubmittedProgress.Submitting &&
+            <img className='h-12' src={LoadingGifs[Math.floor(Math.random() * LoadingGifs.length)]} />
+          }
+          <button
+            className='shadow bg-yellow-500 hover:bg-yellow-400 focus:shadow-outline focus:outline-none text-white font-bold px-4 py-2 rounded cursor-pointer w-fit'
+            onClick={async (e) => {
+              e.preventDefault();
+              const text = await navigator.clipboard.readText();
+              setValue('link', text);
+            }}>
+            Paste Clipboard
+          </button>
+        </div>
       </form>
     </div>
     <InfiniteScroll
