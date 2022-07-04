@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { Media, LinkToAdd } from '../../typings';
 import { sanityClient } from './sanity';
-import { linkToImages } from './linkToImagesBack';
+import { linkToImages } from '../../linkToImages';
 
 export default async function addLink(
   req: NextApiRequest,
