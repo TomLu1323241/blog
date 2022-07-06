@@ -26,6 +26,5 @@ export default async function handler(
   await Promise.all(badEntries.map(async (indexToRemove) => {
     await sanityClient.patch(result._id).splice('links', indexToRemove + index, 1, []).commit();
   }));
-  console.log(badEntries);
   res.status(200).json([archives, 10 - badEntries.length]);
 }

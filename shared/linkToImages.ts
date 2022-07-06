@@ -1,6 +1,6 @@
 import { Media } from './typings';
 import probe from 'probe-image-size';
-import { ArchiveType } from './enums';
+import { MediaType } from './enums';
 
 // WHEN YOU CHANGE THIS YOU ALSO NEED TO CHANGE THE BACKEND AS WELL
 export async function linkToImages(links: string[]): Promise<[Media[], number[]]> {
@@ -28,7 +28,7 @@ export async function linkToImages(links: string[]): Promise<[Media[], number[]]
           temp.push({
             src: link,
             mediaSrc,
-            type: ArchiveType.reddit,
+            type: MediaType.Reddit,
             height: imageDetails.height,
             width: imageDetails.width,
           });
@@ -41,15 +41,28 @@ export async function linkToImages(links: string[]): Promise<[Media[], number[]]
           {
             src: link,
             mediaSrc,
-            type: ArchiveType.reddit,
+            type: MediaType.Reddit,
             height: imageDetails.height,
             width: imageDetails.width,
           }
         ];
       }
-    } else {
-      return [];
     }
+    // check if url is image
+    if ((await fetch(link)).headers.get('content-type')?.toLocaleLowerCase().includes('image')) {
+      const imageDetails = await probe(link);
+      return [
+        {
+          src: link,
+          mediaSrc: link,
+          type: MediaType.RawImage,
+          height: imageDetails.height,
+          width: imageDetails.width,
+        }
+      ];
+    }
+    badEntries.push(index);
+    return [];
   })));
   return [archives, badEntries];
 }

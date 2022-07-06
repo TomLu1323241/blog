@@ -1,4 +1,4 @@
-import { ArchiveType } from './enums';
+import { MediaType } from './enums';
 export interface Post {
   _id: string;
   _createdAt: string;
@@ -41,7 +41,7 @@ export interface Comment {
 export interface Media {
   src: string;
   mediaSrc: string;
-  type: ArchiveType;
+  type: MediaType;
   height: number;
   width: number;
 }

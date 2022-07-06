@@ -4,6 +4,7 @@ export enum SubmittedProgress {
   Submitted,
 }
 
-export enum ArchiveType {
-  reddit,
+export enum MediaType {
+  Reddit,
+  RawImage,
 }
