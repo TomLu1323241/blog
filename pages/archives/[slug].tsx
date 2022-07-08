@@ -1,6 +1,6 @@
-import { GetServerSideProps, GetStaticProps } from 'next';
+import { GetServerSideProps } from 'next';
 import Head from 'next/head';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useState } from 'react';
 import Header from '../../components/header';
 import { sanityClient } from '../../shared/sanity';
 import { Media, LinkToAdd } from '../../shared/typings';
@@ -41,7 +41,6 @@ export default function Archives({ title, archives, slug, size }: Props) {
     handleSubmit,
     setValue,
     reset,
-    formState: { errors },
   } = useForm<LinkToAdd>();
   const [submittingImage, setSubmittingImage] = useState<SubmittedProgress>(SubmittedProgress.NotSubmitted);
   const onSubmit: SubmitHandler<LinkToAdd> = async (data: LinkToAdd) => {
@@ -131,22 +130,27 @@ export default function Archives({ title, archives, slug, size }: Props) {
 }
 
 export const getServerSideProps: GetServerSideProps = async ({ params }) => {
+  const initialFetchSize = 20;
+  const arrayProperties: { size: number} = await sanityClient.fetch(`
+  *[_type == "archives" && slug.current == '${params?.slug}'][0] {
+    'size' : count(links)
+  }`
+  );
   const query = `
-  *[_type == "archives" && slug.current == $slug][0] {
+  *[_type == "archives" && slug.current == '${params?.slug}'][0] {
     _id,
     _createdAt,
     title,
-    links[0...${10}],
+    links[${arrayProperties.size - initialFetchSize}...${arrayProperties.size}],
   }
   `;
-  const images = await sanityClient.fetch(query, {
-    slug: params?.slug,
-  });
+  const images = await sanityClient.fetch(query);
   if (!images) {
     return {
       notFound: true,
     };
   }
+  images.links.reverse();
   const [archives, badEntries]: [Media[], number[]] = await linkToImages(images.links);
   await Promise.all(badEntries.map(async (indexToRemove) => {
     await sanityClient.patch(images._id).splice('links', indexToRemove, 1, []).commit();
@@ -157,7 +161,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
       title: images.title,
       slug: params?.slug,
       archives,
-      size: 10 - badEntries.length,
+      size: initialFetchSize - badEntries.length,
     }
   };
 };
