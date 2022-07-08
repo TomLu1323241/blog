@@ -51,6 +51,19 @@ export interface LinkToAdd {
   link: string;
 }
 
+export interface LinkToAddMultiple extends LinkToAdd {
+  slug: string[] | boolean[];
+}
+
+export interface ImageCategory {
+  title: string;
+  nsfw: boolean;
+}
+
+export interface ImageCategoryRes extends ImageCategory {
+  slug: Slug;
+}
+
 export interface Slug {
   current: string;
   _type: string;

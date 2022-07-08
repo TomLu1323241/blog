@@ -18,7 +18,6 @@ interface Props {
 }
 
 export default function Archives({ title, archives, slug, size }: Props) {
-  // console.log(archives.map(item => item.mediaSrc));
 
   // load new images
   const [images, setImages] = useState<Media[]>(archives);
@@ -119,7 +118,7 @@ export default function Archives({ title, archives, slug, size }: Props) {
       loader={<img className='h-96 mx-auto hover:scale-125 transition-transform duration-200 ease-in-out' src='/loading-circles.gif' />}
       hasMore={hasMoreImages}
       className='flex flex-wrap gap-4 md:mx-4'
-      style={{ overflow: 'clip' }}
+      style={{ overflow: 'clip visible' }}
     >
       {images.map((item: Media) => {
         const multiplier = 384 / item.height;
