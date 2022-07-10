@@ -11,7 +11,7 @@ export default async function handler(
   const { query } = req.query;
   const slug = query[0];
   const index = parseInt(query[1]);
-  const arrayProperties: { size: number} = await sanityClient.fetch(`
+  const arrayProperties: { size: number } = await sanityClient.fetch(`
   *[_type == "archives" && slug.current == '${slug}'][0] {
     'size' : count(links)
   }`
@@ -30,7 +30,7 @@ export default async function handler(
   result.links.reverse();
   const [archives, badEntries]: [Media[], number[]] = await linkToImages(result.links);
   await Promise.all(badEntries.map(async (indexToRemove) => {
-    await sanityClient.patch(result._id).splice('links', indexToRemove + index, 1, []).commit();
+    await sanityClient.patch(result._id).splice('links', arrayProperties.size - index - 10 + indexToRemove, 1, []).commit();
   }));
   res.status(200).json([archives, 10 - badEntries.length]);
 }

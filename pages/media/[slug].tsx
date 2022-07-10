@@ -130,7 +130,7 @@ export default function Archives({ title, archives, slug, size }: Props) {
 
 export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   const initialFetchSize = 20;
-  const arrayProperties: { size: number} = await sanityClient.fetch(`
+  const arrayProperties: { size: number } = await sanityClient.fetch(`
   *[_type == "archives" && slug.current == '${params?.slug}'][0] {
     'size' : count(links)
   }`
@@ -152,7 +152,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   images.links.reverse();
   const [archives, badEntries]: [Media[], number[]] = await linkToImages(images.links);
   await Promise.all(badEntries.map(async (indexToRemove) => {
-    await sanityClient.patch(images._id).splice('links', indexToRemove, 1, []).commit();
+    await sanityClient.patch(images._id).splice('links', arrayProperties.size - initialFetchSize + indexToRemove, 1, []).commit();
   }));
   console.log(badEntries);
   return {

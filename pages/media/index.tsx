@@ -1,7 +1,7 @@
 import { GetStaticProps } from 'next';
 import Link from 'next/link';
 import { sanityClient } from '../../shared/sanity';
-import { ImageCategory, ImageCategoryRes, LinkToAdd, LinkToAddMultiple, Slug } from '../../shared/typings';
+import { ImageCategory, ImageCategoryRes, LinkToAdd, LinkToAddMultiple, Media, Slug } from '../../shared/typings';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import ReactSwitch from 'react-switch';
 import { useState } from 'react';
@@ -29,36 +29,9 @@ export default function Archives(props: Props) {
     });
     if (res.ok) {
       const resBody: ImageCategoryRes = await res.json();
-      setPageInfo(original => [...original, {title: data.title, slug: resBody.slug,}]);
-      resetCategory({title: ''});
+      setPageInfo(original => [...original, { title: data.title, slug: resBody.slug }]);
+      resetCategory({ title: '' });
       setNSFW(false);
-    } else {
-      // tell the user the thing failed
-    }
-  };
-
-  const {
-    register: regAddLink,
-    handleSubmit: handAddLink,
-    reset: resetAddLink,
-  } = useForm<LinkToAddMultiple>();
-  const onSubmitAddLink: SubmitHandler<LinkToAddMultiple> = async (data: LinkToAddMultiple) => {
-    console.log(data);
-    const slug: string[] = [];
-    data.slug.forEach((item, index) => {
-      if (item) {
-        slug.push(pageInfo[index].slug.current);
-      }
-    });
-    data.slug = slug;
-    console.log(data);
-    return;
-    const res = await fetch('/api/addLink', {
-      method: 'POST',
-      body: JSON.stringify(data),
-    });
-    if (res.ok) {
-      // all good
     } else {
       // tell the user the thing failed
     }
@@ -93,28 +66,6 @@ export default function Archives(props: Props) {
         Add Media Category
       </button>
     </form>
-    <form className='flex flex-col gap-x-3 py-8 mx-12' onSubmit={handAddLink(onSubmitAddLink)}>
-      <input
-          {...regAddLink('link')}
-          placeholder='https://www.reddit.com/r/HuTao_Mains/comments/vbym4y/hu_tao_plays_guitar_now/'
-          className='shadow border rounded px-4 py-2 mx-8 w-fill md:w-96 ring-yellow-500 outline-none focus:ring md:mx-0'
-      />
-      {pageInfo.map((item, index) => (
-        <div className='flex flex-row gap-x-3' key={item.slug.current}>
-          <input
-            {...regAddLink(`slug.${index}`)}
-            type='checkbox'
-          />
-          <p className='text-2xl'>{item.title}</p>
-        </div>
-      ))}
-      <button
-        type='submit'
-        className='shadow bg-yellow-500 hover:bg-yellow-400 focus:shadow-outline focus:outline-none text-white font-bold px-4 py-2 rounded cursor-pointer w-fit'
-      >
-        Add Media Category
-      </button>
-    </form>
   </>;
 }
 
@@ -123,9 +74,10 @@ export const getStaticProps: GetStaticProps = async () => {
   *[_type == "archives"] {
     title,
     slug,
+    links[0...10]
   }
   `;
-  const results: { title: string, slug: string }[] = await sanityClient.fetch(query);
+  const results: { title: string, slug: string, links: string[], media: Media[] }[] = await sanityClient.fetch(query);
   return {
     props: {
       pageInfo: results,
