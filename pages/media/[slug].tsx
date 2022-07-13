@@ -26,9 +26,10 @@ export default function Archives({ title, archives, slug, size }: Props) {
   const loadMoreImages = async () => {
     const res = await fetch(`/api/loadNewImages/${slug}/${fetchSize}`);
     if (res.ok) {
-      const [resJson, size]: [Media[], number] = await res.json();
+      const [resJson, size, hasMore]: [Media[], number, boolean] = await res.json();
       setImages(images => [...images, ...resJson]);
       setFetchSize(fetchSize + size);
+      setHasMoreImages(hasMore);
     } else {
       setHasMoreImages(false);
     }
