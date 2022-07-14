@@ -1,4 +1,4 @@
-import { GetServerSideProps } from 'next';
+import { GetServerSideProps, GetStaticPaths, GetStaticProps } from 'next';
 import Head from 'next/head';
 import React, { useState } from 'react';
 import Header from '../../components/header';
@@ -129,7 +129,30 @@ export default function Archives({ title, archives, slug, size }: Props) {
   </>;
 }
 
-export const getServerSideProps: GetServerSideProps = async ({ params }) => {
+export const getStaticPaths: GetStaticPaths = async () => {
+  const query = `
+  *[_type == "archives"] {
+    _id,
+    _createdAt,
+    title,
+    slug,
+  }
+  `;
+  const imageTypes: any = await sanityClient.fetch(query);
+
+  const paths = imageTypes.map((images: any) => ({
+    params: {
+      slug: images.slug.current,
+    }
+  }));
+
+  return {
+    paths,
+    fallback: 'blocking',
+  };
+};
+
+export const getStaticProps: GetStaticProps = async ({ params }) => {
   const initialFetchSize = 20;
   const arrayProperties: { size: number } = await sanityClient.fetch(`
   *[_type == "archives" && slug.current == '${params?.slug}'][0] {
@@ -162,6 +185,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
       slug: params?.slug,
       archives,
       size: initialFetchSize - badEntries.length,
-    }
+    },
+    revalidate: 3600,
   };
 };

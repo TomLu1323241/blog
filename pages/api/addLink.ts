@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { Media, LinkToAdd, LinkToAddMultiple } from '../../shared/typings';
+import { Media, LinkToAdd } from '../../shared/typings';
 import { sanityClient } from './sanity';
 import { linkToImages } from '../../shared/linkToImages';
 
@@ -7,8 +7,7 @@ export default async function addLink(
   req: NextApiRequest,
   res: NextApiResponse<Media[]>
 ) {
-  // TODO: need to make this work with multiple slugs
-  const body: LinkToAdd | LinkToAddMultiple = JSON.parse(req.body);
+  const body: LinkToAdd = JSON.parse(req.body);
   const queryResult: { _id: string, contains: boolean } = await sanityClient.fetch(`
   *[_type == "archives" && slug.current == '${body.slug}'][0] {
     _id,
@@ -28,6 +27,7 @@ export default async function addLink(
       return;
     }
     await sanityClient.patch(queryResult._id).append('links', [body.link]).commit();
+    await res.revalidate(`/media/${body.slug}`);
     res.status(200).json(newArchives);
     return;
   }

@@ -8,7 +8,7 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<[Media[], number, boolean]>
 ) {
-  const { query } = req.query;
+  const query = req.query['query'] as string[];
   const slug = query[0];
   const index = parseInt(query[1]);
   const arrayProperties: { size: number } = await sanityClient.fetch(`
@@ -22,7 +22,6 @@ export default async function handler(
     links[${arrayProperties.size - index - 10 > 0 ? arrayProperties.size - index - 10 : 0}...${arrayProperties.size - index - 10 > 0 ? arrayProperties.size - index : arrayProperties.size - index}],
   }
   `;
-  console.log(queryDB);
   const result = await sanityClient.fetch(queryDB);
   if (result.links.length === 0) {
     res.status(404).end();
