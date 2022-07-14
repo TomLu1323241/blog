@@ -11,7 +11,7 @@
     "@sanity/image-url": "^1.0.1",
     "@types/nodemailer": "^6.4.4",
     "@types/probe-image-size": "^7.2.0",
-    "next": "^12.2.2",
+    "next": "^12.2.3-canary.8",
     "next-sanity": "^0.5.2",
     "next-themes": "^0.2.0",
     "nodemailer": "^6.7.5",
