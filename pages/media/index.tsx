@@ -41,9 +41,8 @@ export default function Archives(props: Props) {
     <h1>This is the archives page</h1>
     {pageInfo.map((item, index) => {
       return <div key={`${index}-div`}>
-        <Link href={`/media/${item.slug.current}`} passHref>
-          <a className='text-2xl text-blue-500 underline' >{item.title}</a>
-        </Link>
+        {/* TODO: put the link tag back when this on demand isr stable */}
+        <a className='text-2xl text-blue-500 underline' href={`/media/${item.slug.current}`}>{item.title}</a>
       </div>;
     })}
     <form className='flex flex-row gap-x-3 justify-left items-center py-8 mx-12' onSubmit={handCategory(onSubmitCategory)}>
