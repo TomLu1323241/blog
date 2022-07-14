@@ -27,7 +27,6 @@ export default async function addLink(
       return;
     }
     await sanityClient.patch(queryResult._id).append('links', [body.link]).commit();
-    await res.revalidate(`/media/${body.slug}`);
     res.status(200).json(newArchives);
     return;
   }

@@ -32,6 +32,7 @@ export default function Archives(props: Props) {
       setPageInfo(original => [...original, { title: data.title, slug: resBody.slug }]);
       resetCategory({ title: '' });
       setNSFW(false);
+      await fetch('/api/revalidate?path=/media');
     } else {
       // tell the user the thing failed
     }
@@ -82,6 +83,6 @@ export const getStaticProps: GetStaticProps = async () => {
     props: {
       pageInfo: results,
     },
-    revalidate: 60,
+    revalidate: 3600,
   };
 };

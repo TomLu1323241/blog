@@ -58,6 +58,8 @@ export default function Archives({ title, archives, slug, size }: Props) {
       setImages(images => [...newArchive, ...images]);
       setFetchSize(fetchSize + 1);
       reset({ link: '' });
+      await fetch(`/api/revalidate?path=/media`);
+      await fetch(`/api/revalidate?path=/media/${slug}`);
     } else {
       setSubmittingImage(SubmittedProgress.NotSubmitted);
       // Some kinda error for the user
