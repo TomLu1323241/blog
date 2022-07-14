@@ -1,7 +1,7 @@
 import { GetStaticProps } from 'next';
 import Link from 'next/link';
 import { sanityClient } from '../../shared/sanity';
-import { ImageCategory, ImageCategoryRes, LinkToAdd, LinkToAddMultiple, Media, Slug } from '../../shared/typings';
+import { ImageCategory, ImageCategoryRes, Media, Slug } from '../../shared/typings';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import ReactSwitch from 'react-switch';
 import { useState } from 'react';
