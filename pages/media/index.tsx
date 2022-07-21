@@ -38,27 +38,29 @@ export default function Archives(props: Props) {
     }
   };
   return <>
-    <h1>This is the archives page</h1>
+    <h1 className='text-3xl truncate mx-auto'>This is the archives page</h1>
     {pageInfo.map((item, index) => {
-      return <div key={`${index}-div`}>
+      return <div className='py-4 md:py-2' key={`${index}-div`}>
         {/* TODO: put the link tag back when this on demand isr stable */}
-        <a className='text-2xl text-blue-500 underline' href={`/media/${item.slug.current}`}>{item.title}</a>
+        <a className='text-4xl md:text-2xl text-blue-500 underline' href={`/media/${item.slug.current}`}>{item.title}</a>
       </div>;
     })}
-    <form className='flex flex-row gap-x-3 justify-left items-center py-8 mx-12' onSubmit={handCategory(onSubmitCategory)}>
+    <form className='flex flex-col md:flex-row gap-y-3 gap-x-0 md:gap-x-3 justify-left items-center py-8 md:mx-12' onSubmit={handCategory(onSubmitCategory)}>
       <input
         {...regCategory('title')}
         placeholder={'Hu Tao'}
-        className='shadow border rounded px-4 py-2 mx-8 w-fill md:w-96 ring-yellow-500 outline-none focus:ring md:mx-0'
+        className='shadow border rounded px-2 md:px-4 py-2 mx-8 w-fill md:w-96 ring-yellow-500 outline-none focus:ring md:mx-0'
       />
-      <p className='italic text-yellow-400'>NSFW</p>
-      <ReactSwitch
-        checked={NSFW}
-        onChange={(state) => {
-          setNSFW(state);
-        }}
-        onColor='#facc15'
-      />
+      <div className='flex flow-row gap-x-3'>
+        <p className='italic text-yellow-400'>NSFW</p>
+        <ReactSwitch
+          checked={NSFW}
+          onChange={(state) => {
+            setNSFW(state);
+          }}
+          onColor='#facc15'
+        />
+      </div>
       <button
         type='submit'
         className='shadow bg-yellow-500 hover:bg-yellow-400 focus:shadow-outline focus:outline-none text-white font-bold px-4 py-2 rounded cursor-pointer w-fit'

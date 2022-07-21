@@ -9,6 +9,7 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { SubmittedProgress } from '../../shared/enums';
 import { LoadingGifs } from '../../shared/consts';
+import ReactSwitch from 'react-switch';
 
 interface Props {
   title: string;
@@ -18,6 +19,8 @@ interface Props {
 }
 
 export default function Archives({ title, archives, slug, size }: Props) {
+  // Extra Large Size
+  const [sizeToggle, setSizeToggle] = useState<boolean>(false);
 
   // load new images
   const [images, setImages] = useState<Media[]>(archives);
@@ -71,7 +74,7 @@ export default function Archives({ title, archives, slug, size }: Props) {
     </Head>
     <div className='max-w-7xl mx-auto' >
       <Header />
-      <div className='flex justify-between items-center bg-yellow-400 py-10 lg:py-0'>
+      <div className='flex justify-between items-start md:items-center bg-yellow-400 py-10 lg:py-0'>
         <div className='px-10 space-y-5'>
           <h1 className='text-6xl max-w-xl font-serif'>
             {title}
@@ -80,11 +83,29 @@ export default function Archives({ title, archives, slug, size }: Props) {
             Some details about {title}
           </h2>
         </div>
-        <img
-          className='hidden md:inline-flex h-52 lg:h-96 pr-5'
-          src='/T.png'
-          alt=''
-        />
+        <div className='flex flex-col'>
+          <div className='ml-auto md:pr-5 md:flex flex-col md:flex-row md:gap-x-4 font-bold font-mono md:pt-4 items-center hidden md:visible'>
+            <p className='text-lg'>Large View</p>
+            <ReactSwitch
+              checked={sizeToggle}
+              onChange={(state) => setSizeToggle(state)}
+              onColor='#86d3ff'
+              onHandleColor='#2693e6'
+              handleDiameter={30}
+              uncheckedIcon={false}
+              checkedIcon={false}
+              boxShadow='0px 1px 5px rgba(0, 0, 0, 0.6)'
+              activeBoxShadow='0px 0px 1px 10px rgba(0, 0, 0, 0.2)'
+              height={20}
+              width={48}
+            ></ReactSwitch>
+          </div>
+          <img
+            className='hidden md:inline-flex h-52 lg:h-72 pr-5'
+            src='/T.png'
+            alt=''
+          />
+        </div>
       </div>
       <form className='flex flex-col gap-y-3 md:flex-row justify-evenly bg-yellow-400 py-2' onSubmit={handleSubmit(onSubmit)}>
         <input
@@ -119,8 +140,8 @@ export default function Archives({ title, archives, slug, size }: Props) {
       next={loadMoreImages}
       loader={<img className='h-96 mx-auto hover:scale-125 transition-transform duration-200 ease-in-out' src='/loading-circles.gif' />}
       hasMore={hasMoreImages}
-      className='flex flex-wrap gap-4 md:mx-4'
-      style={{ overflow: 'clip visible' }}
+      className={`flex flex-wrap gap-4 ${sizeToggle ? 'mx-4' : 'mx-auto max-w-7xl'}`}
+      style={{ overflow: `clip visible` }}
     >
       {images.map((item: Media) => {
         const multiplier = 384 / item.height;
