@@ -29,9 +29,9 @@ export default async function handler(
   }
   result.links.reverse();
   const startingLength = result.links.length;
-  const [archives, badEntries]: [Media[], number[]] = await linkToImages(result.links);
-  await Promise.all(badEntries.map(async (indexToRemove) => {
-    await sanityClient.patch(result._id).splice('links', (arrayProperties.size - index - 10 > 0 ? arrayProperties.size - index - 10 : 0) + indexToRemove, 1, []).commit();
+  const [archives, badLinks]: [Media[], string[]] = await linkToImages(result.links);
+  await Promise.all(badLinks.map(async (link) => {
+    await sanityClient.patch(result._id).unset(['links[0]', `links[_key=="${link}"]`]).commit();
   }));
-  res.status(200).json([archives, startingLength - badEntries.length, arrayProperties.size - index - 10 > 0]);
+  res.status(200).json([archives, startingLength - badLinks.length, arrayProperties.size - index - 10 > 0]);
 }

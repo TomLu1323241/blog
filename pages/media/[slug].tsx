@@ -196,17 +196,16 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     };
   }
   images.links.reverse();
-  const [archives, badEntries]: [Media[], number[]] = await linkToImages(images.links);
-  await Promise.all(badEntries.map(async (indexToRemove) => {
-    await sanityClient.patch(images._id).splice('links', arrayProperties.size - initialFetchSize + indexToRemove, 1, []).commit();
+  const [archives, badLinks]: [Media[], string[]] = await linkToImages(images.links);
+  await Promise.all(badLinks.map(async (link) => {
+    await sanityClient.patch(images._id).unset(['links[0]', `links[_key=="${link}"]`]).commit();
   }));
-  console.log(badEntries);
   return {
     props: {
       title: images.title,
       slug: params?.slug,
       archives,
-      size: initialFetchSize - badEntries.length,
+      size: initialFetchSize - badLinks.length,
     },
     revalidate: 3600,
   };

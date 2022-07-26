@@ -11,7 +11,7 @@ export default async function addLink(
   const queryResult: { _id: string, contains: boolean } = await sanityClient.fetch(`
   *[_type == "archives" && slug.current == '${body.slug}'][0] {
     _id,
-    'contain': '${body.link}' in links
+    'contains': '${body.link}' in links
   }
   `);
   if (queryResult.contains) {

@@ -3,12 +3,12 @@ import probe from 'probe-image-size';
 import { MediaType } from './enums';
 
 // WHEN YOU CHANGE THIS YOU ALSO NEED TO CHANGE THE BACKEND AS WELL
-export async function linkToImages(links: string[]): Promise<[Media[], number[]]> {
+export async function linkToImages(links: string[]): Promise<[Media[], string[]]> {
   // the map returns an array of arrays of Archive objects, it is an array of array because a link can be a gallery of images
   // the ... converts the array of arrays into a bunch of separate arrays
   // the concat combines everything into one array of objects
   // this is done to keep order
-  const badEntries: number[] = [];
+  const badEntries: string[] = [];
   const baseURL = 'https://i.redd.it/';
   const archives: Media[] = ([] as Media[]).concat(...await Promise.all<Media[]>(links.map(async (link: string, index: number) => {
     // Assume its a reddit url
@@ -16,7 +16,7 @@ export async function linkToImages(links: string[]): Promise<[Media[], number[]]
       const res = await fetch(`${link.slice(0, -1)}.json`);
       const redditBody = await res.json();
       if (redditBody[0].data.children[0].data.removed_by_category === 'deleted') {
-        badEntries.push(index);
+        badEntries.push(link);
         return [];
       }
       if (redditBody[0].data.children[0].data.url.includes('gallery')) {
@@ -61,7 +61,7 @@ export async function linkToImages(links: string[]): Promise<[Media[], number[]]
         }
       ];
     }
-    badEntries.push(index);
+    badEntries.push(link);
     return [];
   })));
   return [archives, badEntries];
