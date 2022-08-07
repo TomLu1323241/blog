@@ -79,7 +79,7 @@ async function sendDiscordMessage(posts: Post[]): Promise<void> {
       .setTitle(`Check out: ${post.title}`)
       .setAuthor(post.author.name, urlFor(post.author.image).url())
       .setDescription(post.description)
-      // eslint-disable-next-line
+      // @ts-ignore
       .setURL(`https://www.tomlu.me/post/${post.slug.current}`)
       .setImage(urlFor(post.mainImage).url())
       .setFooter(`Published: ${new Date(post._createdAt).toLocaleString('en-US', {
