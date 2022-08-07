@@ -106,7 +106,7 @@ export default function EmailVerification() {
         }
 
         {(submittedEmail == SubmittedProgress.Submitted && submittedCode == SubmittedProgress.NotSubmitted) &&
-          <form onSubmit={handleSubmitCode(onSummitCode)} className='flex flex-col justify-center'>
+          <form onSubmit={handleSubmitCode(onSummitCode)} className='flex flex-col justify-center '>
             <input
               {...registerCode('email')}
               type='hidden'
@@ -125,7 +125,7 @@ export default function EmailVerification() {
                 }}
                 classNames={{
                   container: 'h-24 flex flex-row mx-auto gap-2',
-                  character: 'w-16 text-6xl leading-[5.5rem] rounded-2xl bg-yellow-100 border-2 border-yellow-200 hover:bg-yellow-200'
+                  character: 'w-16 text-6xl leading-[5.5rem] rounded-2xl bg-yellow-100 border-2 border-yellow-200 hover:bg-yellow-200 dark:bg-gray-700 dark:hover:bg-gray-600 dark:border-gray-500'
                 }}
               />
             </div>
