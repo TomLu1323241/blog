@@ -15,7 +15,7 @@ export async function linkToImages(links: string[]): Promise<[Media[], string[]]
     if (link.toLocaleLowerCase().includes('reddit')) {
       const res = await fetch(`${link.slice(0, -1)}.json`);
       const redditBody = await res.json();
-      if (redditBody[0].data.children[0].data.removed_by_category === 'deleted') {
+      if (redditBody[0].data.children[0].data.removed_by_category !== null) {
         badEntries.push(link);
         return [];
       }
