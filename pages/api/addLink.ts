@@ -21,12 +21,12 @@ export default async function addLink(
     if (body.link.toLowerCase().includes('reddit') && body.link.includes('?')) {
       body.link = body.link.substring(0, body.link.indexOf('?'));
     }
-    const newArchives: Media[] = (await linkToImages([body.link]))[0];
+    const newArchives: Media[] = (await linkToImages([body.link]));
     if (newArchives.length === 0) {
       res.status(416).end();
       return;
     }
-    await sanityClient.patch(queryResult._id).append('links', [body.link]).commit();
+    await sanityClient.patch(queryResult._id).prepend('links', [body.link]).commit();
     res.status(200).json(newArchives);
     return;
   }

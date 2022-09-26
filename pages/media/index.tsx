@@ -41,8 +41,9 @@ export default function Archives(props: Props) {
     <h1 className='text-3xl truncate mx-auto'>This is the archives page</h1>
     {pageInfo.map((item, index) => {
       return <div className='py-4 md:py-2' key={`${index}-div`}>
-        {/* TODO: put the link tag back when this on demand isr stable */}
-        <a className='text-4xl md:text-2xl text-blue-500 underline' href={`/media/${item.slug.current}`}>{item.title}</a>
+        <Link passHref href={`/media/${item.slug.current}`}>
+          <a className='text-4xl md:text-2xl text-blue-500 underline'>{item.title}</a>
+        </Link>
       </div>;
     })}
     <form className='flex flex-col md:flex-row gap-y-3 gap-x-0 md:gap-x-3 justify-left items-center py-8 md:mx-12' onSubmit={handCategory(onSubmitCategory)}>
@@ -76,10 +77,9 @@ export const getStaticProps: GetStaticProps = async () => {
   *[_type == "archives"] {
     title,
     slug,
-    links[0...10]
   }
   `;
-  const results: { title: string, slug: string, links: string[], media: Media[] }[] = await sanityClient.fetch(query);
+  const results: { title: string, slug: string }[] = await sanityClient.fetch(query);
   return {
     props: {
       pageInfo: results,
