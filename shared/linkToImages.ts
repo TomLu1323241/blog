@@ -24,16 +24,27 @@ export async function linkToImages(links: string[]): Promise<Media[]> {
           for (const key of Object.keys(data)) {
             const mediaSrc = `${baseURL}${key}.${data[key].m.split('/')[1]}`;
             const imageDetails = await probe(mediaSrc);
-            return [
-              {
-                src: link,
-                mediaSrc,
-                type: MediaType.Reddit,
-                height: imageDetails.height,
-                width: imageDetails.width,
-              }
-            ];
+            temp.push({
+              src: link,
+              mediaSrc,
+              type: MediaType.Reddit,
+              height: imageDetails.height,
+              width: imageDetails.width,
+            });
           }
+          return temp;
+        } else {
+          const mediaSrc = redditBody[0].data.children[0].data.url;
+          const imageDetails = await probe(mediaSrc);
+          return [
+            {
+              src: link,
+              mediaSrc,
+              type: MediaType.Reddit,
+              height: imageDetails.height,
+              width: imageDetails.width,
+            }
+          ];
         }
       }
       // check if url is image
