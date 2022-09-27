@@ -29,7 +29,8 @@ export default {
       of: [{ type: 'string' }],
       options: {
         layout: 'grid'
-      }
+      },
+      validation: Rule => Rule.unique(),
     }
   ],
   preview: {
