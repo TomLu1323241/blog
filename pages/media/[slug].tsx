@@ -193,7 +193,6 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     };
   }
   const archives: Media[] = await linkToImages(images.links);
-  console.log(archives);
   return {
     props: {
       title: images.title,

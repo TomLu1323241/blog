@@ -26,7 +26,12 @@ export default async function addLink(
       res.status(416).end();
       return;
     }
-    await sanityClient.patch(queryResult._id).prepend('links', [body.link]).commit();
+    try {
+      await sanityClient.patch(queryResult._id).prepend('links', [body.link]).commit();
+    } catch {
+      res.status(416).end();
+      return;
+    }
     res.status(200).json(newArchives);
     return;
   }
