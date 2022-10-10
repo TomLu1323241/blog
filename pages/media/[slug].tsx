@@ -84,7 +84,7 @@ export default function Archives({ title, archives, slug, size }: Props) {
             {title}
           </h1>
           <h2>
-            Some details about {title}
+            Some details about {title} - {linkArraySize}
           </h2>
         </div>
         <div className='flex flex-col'>
