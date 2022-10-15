@@ -144,12 +144,12 @@ export default function Archives({ title, archives, slug, size }: Props) {
       next={loadMoreImages}
       loader={<img className='h-96 mx-auto hover:scale-125 transition-transform duration-200 ease-in-out' src='/loading-circles.gif' />}
       hasMore={hasMoreImages}
-      className={`flex flex-wrap gap-4 ${sizeToggle ? 'mx-4' : 'mx-auto max-w-7xl'}`}
+      className={`flex flex-wrap gap-4 ${sizeToggle ? 'mx-4' : 'mx-auto max-w-7xl'} justify-between`}
       style={{ overflow: `clip visible` }}
     >
       {images.map((item: Media) => {
         const multiplier = 384 / item.height;
-        return <img key={item.mediaSrc} height={item.height * multiplier} width={item.width * multiplier} className='mx-auto hover:scale-125 transition-transform duration-200 ease-in-out' src={item.mediaSrc} loading='lazy' />;
+        return <img key={item.mediaSrc} height={item.height * multiplier} width={item.width * multiplier} className='hover:scale-125 transition-transform duration-200 ease-in-out' src={item.mediaSrc} loading='lazy' />;
       })}
     </InfiniteScroll>
   </>;
