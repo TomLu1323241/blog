@@ -1,21 +1,20 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { sanityClient } from '../sanity';
-import { Media } from '../../../shared/typings';
-import { linkToImages } from '../../../shared/linkToImages';
-import { FETCH_SIZE } from '../../../shared/consts';
+import { sanityClient } from './sanity';
+import { Media } from '../../shared/typings';
+import { linkToImages } from '../../shared/linkToImages';
+import { FETCH_SIZE } from '../../shared/consts';
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Media[]>
 ) {
-  const query = req.query['query'] as string[];
-  const slug = query[0];
-  const index = parseInt(query[1]);
+  const query = req.query;
+  const { slug, index }: { slug: string, index: number } = query as any;
   const queryDB = `
   *[_type == "archives" && slug.current == '${slug}'][0] {
     _id,
-    links[${index}...${index + FETCH_SIZE}],
+    links[${index}...${Number(index) + FETCH_SIZE}],
   }
   `;
   const result = await sanityClient.fetch(queryDB);
