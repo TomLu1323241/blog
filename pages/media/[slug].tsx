@@ -149,7 +149,7 @@ export default function Archives({ title, archives, slug, size }: Props) {
     >
       {images.map((item: Media) => {
         const multiplier = 384 / item.height;
-        return <img key={item.mediaSrc} height={item.height * multiplier} width={item.width * multiplier} className='hover:scale-125 transition-transform duration-200 ease-in-out' src={item.mediaSrc} loading='lazy' />;
+        return <img key={item.mediaSrc} height={item.height * multiplier} width={item.width * multiplier} className='mx-auto md:mx-0 hover:scale-125 transition-transform duration-200 ease-in-out' src={item.mediaSrc} loading='lazy' />;
       })}
     </InfiniteScroll>
   </>;
