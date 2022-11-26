@@ -1,6 +1,18 @@
 import { Media } from './typings';
 import probe from 'probe-image-size';
 import { MediaType } from './enums';
+import getColors from 'get-image-colors';
+import sharp from 'sharp';
+
+async function getColor(url: string, mime: string): Promise<string[]> {
+  const res = await fetch(url);
+  const arrayBuffer = await res.arrayBuffer();
+  const buffer = Buffer.from(arrayBuffer);
+  const smallerImageBuffer = await sharp(buffer).resize(50).toBuffer();
+  // @ts-ignore
+  const colors: chroma.Color[] = await getColors(smallerImageBuffer, { type: mime, count: 1 });
+  return colors.map(color => color.hex());
+}
 
 // WHEN YOU CHANGE THIS YOU ALSO NEED TO CHANGE THE BACKEND AS WELL
 export async function linkToImages(links: string[]): Promise<Media[]> {
@@ -24,18 +36,21 @@ export async function linkToImages(links: string[]): Promise<Media[]> {
           for (const key of Object.keys(data)) {
             const mediaSrc = `${baseURL}${key}.${data[key].m.split('/')[1]}`;
             const imageDetails = await probe(mediaSrc);
+            const colors = await getColor(mediaSrc, imageDetails.mime);
             temp.push({
               src: link,
               mediaSrc,
               type: MediaType.Reddit,
               height: imageDetails.height,
               width: imageDetails.width,
+              colors,
             });
           }
           return temp;
         } else {
           const mediaSrc = redditBody[0].data.children[0].data.url;
           const imageDetails = await probe(mediaSrc);
+          const colors = await getColor(mediaSrc, imageDetails.mime);
           return [
             {
               src: link,
@@ -43,6 +58,7 @@ export async function linkToImages(links: string[]): Promise<Media[]> {
               type: MediaType.Reddit,
               height: imageDetails.height,
               width: imageDetails.width,
+              colors,
             }
           ];
         }
@@ -50,6 +66,7 @@ export async function linkToImages(links: string[]): Promise<Media[]> {
       // check if url is image
       if ((await fetch(link)).headers.get('content-type')?.toLocaleLowerCase().includes('image')) {
         const imageDetails = await probe(link);
+        const colors = await getColor(link, imageDetails.mime);
         return [
           {
             src: link,
@@ -57,6 +74,7 @@ export async function linkToImages(links: string[]): Promise<Media[]> {
             type: MediaType.RawImage,
             height: imageDetails.height,
             width: imageDetails.width,
+            colors,
           }
         ];
       }

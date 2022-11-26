@@ -5,7 +5,12 @@ module.exports = {
   ],
   darkMode: 'class',
   theme: {
-    extend: {},
+    extend: {
+      boxShadow: {
+        '3xl': '35px 35px 35px rgba(0, 0, 0, 0.3)',
+        'inner-md': 'inset 10px 10px 35px rgba(0, 0, 0, 0.3)',
+      }
+    },
   },
   plugins: [],
 };

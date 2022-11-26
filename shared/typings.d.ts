@@ -44,6 +44,7 @@ export interface Media {
   type: MediaType;
   height: number;
   width: number;
+  colors: string[];
 }
 
 export interface LinkToAdd {

@@ -142,21 +142,28 @@ export default function Archives({ title, archives, slug, size }: Props) {
     <InfiniteScroll
       dataLength={images.length}
       next={loadMoreImages}
-      loader={<img className='h-96 mx-auto hover:scale-125 transition-transform duration-200 ease-in-out' src='/loading-circles.gif' />}
+      loader={<img className='h-96 mx-auto hover:scale-125' src='/loading-circles.gif' />}
       hasMore={hasMoreImages}
       className={`flex flex-wrap gap-4 ${sizeToggle ? 'mx-4' : 'mx-auto max-w-7xl'} justify-between`}
       style={{ overflow: `clip visible` }}
     >
-      {images.map((item: Media) => {
+      {images.map((item: Media, index: number) => {
         const multiplier = 384 / item.height;
-        return <img
-          key={item.mediaSrc}
-          height={item.height * multiplier}
-          width={item.width * multiplier}
-          className='mx-auto md:mx-0 hover:scale-125 transition-transform duration-200 ease-in-out'
-          src={item.mediaSrc}
-          loading='lazy'
-        />;
+        return <>
+          <div
+            className='mx-auto md:mx-0 p-12 shadow-inner-md rounded-xl overflow-hidden'
+            style={{ backgroundColor: item.colors[0] }}
+            key={`${item.mediaSrc}-${index}`}
+          >
+            <img
+              height={item.height * multiplier}
+              width={item.width * multiplier}
+              className='hover:scale-125 transition-transform duration-200 ease-in-out shadow-3xl'
+              src={item.mediaSrc}
+              loading='lazy'
+            />
+          </div>
+        </>;
       })}
     </InfiniteScroll>
   </>;
