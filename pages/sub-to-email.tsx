@@ -1,9 +1,9 @@
 import Head from 'next/head';
 import { useRef, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { SubmittedProgress } from '../enums';
-import { Email, EmailCode } from '../typings';
-import { LoadingGifs } from '../consts';
+import { SubmittedProgress } from '../shared/enums';
+import { Email, EmailCode } from '../shared/typings';
+import { LoadingGifs } from '../shared/consts';
 import VerificationInput from 'react-verification-input';
 import Link from 'next/link';
 

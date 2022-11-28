@@ -3,3 +3,8 @@ export enum SubmittedProgress {
   Submitting,
   Submitted,
 }
+
+export enum MediaType {
+  Reddit,
+  RawImage,
+}

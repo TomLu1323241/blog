@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { Email, Post } from '../../typings';
+import { Email, Post } from '../../shared/typings';
 import { sanityClient, urlFor } from './sanity';
 import { sendMail } from './sendMail';
 import { Webhook, MessageBuilder } from 'discord-webhook-node';

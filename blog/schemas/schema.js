@@ -12,6 +12,7 @@ import author from './author'
 import comment from './comment'
 import imageGroups from './imageGroups'
 import subEmail from './subEmail'
+import archives from './archives'
 
 // Then we give our schema to the builder and provide the result to Sanity
 export default createSchema({
@@ -31,5 +32,6 @@ export default createSchema({
     imageGroups,
     comment,
     subEmail,
+    archives,
   ]),
 })

@@ -1,3 +1,4 @@
+import { MediaType } from './enums';
 export interface Post {
   _id: string;
   _createdAt: string;
@@ -12,9 +13,7 @@ export interface Post {
       url: string;
     };
   };
-  slug: {
-    current: string;
-  };
+  slug: Slug;
   body: object[];
   comment: Comment[];
 }
@@ -37,4 +36,32 @@ export interface EmailCode {
 export interface Comment {
   author: string;
   comment: string;
+}
+
+export interface Media {
+  src: string;
+  mediaSrc: string;
+  type: MediaType;
+  height: number;
+  width: number;
+  colors: string[];
+}
+
+export interface LinkToAdd {
+  slug: string;
+  link: string;
+}
+
+export interface ImageCategory {
+  title: string;
+  nsfw: boolean;
+}
+
+export interface ImageCategoryRes extends ImageCategory {
+  slug: Slug;
+}
+
+export interface Slug {
+  current: string;
+  _type: string;
 }

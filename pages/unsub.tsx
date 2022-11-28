@@ -2,9 +2,9 @@ import Head from 'next/head';
 import Link from 'next/link';
 import { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { LoadingGifs } from '../consts';
-import { SubmittedProgress } from '../enums';
-import { Email } from '../typings';
+import { LoadingGifs } from '../shared/consts';
+import { SubmittedProgress } from '../shared/enums';
+import { Email } from '../shared/typings';
 
 export default function Unsub() {
   const [submittedEmail, setSubmittedEmail] = useState<SubmittedProgress>(SubmittedProgress.NotSubmitted);
