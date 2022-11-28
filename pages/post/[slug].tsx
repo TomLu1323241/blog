@@ -125,17 +125,25 @@ export default function PostPage({ post, imageGroupAssets }: Props) {
               ),
               blockquote: (props: any) => (
                 <div className='max-w-fit md:max-w-4xl md:w-fit mx-auto bg-grey-light rounded-lg shadow-md p-8 border dark:border-gray-600 dark:bg-gray-800 dark:shadow-gray-700'>
-                  <h2 className='italic text-right text-blue-darkest leading-normal break-words'>
-                    {props.children[0].split('-')[0].trim()}
-                  </h2>
-                  {props.children[0].split('-')[1] ? (
-                    <p className='text-right pt-2 pr-6 text-gray-400'>
-                      - {props.children[0].split('-')[1].trim()}
-                    </p>
-                  ) : (
-                    <p className='text-right pt-2 pr-6 text-gray-400'>
-                      - anonymous
-                    </p>
+                  {props.children[0].lastIndexOf('-') !== -1 && (
+                    <>
+                      <h2 className='italic text-right text-blue-darkest leading-normal break-words'>
+                        {props.children[0].substring(0, props.children[0].lastIndexOf('-'))}
+                      </h2>
+                      <p className='text-right pt-2 pr-6 text-gray-400'>
+                        - {props.children[0].substring(props.children[0].lastIndexOf('-') + 1)}
+                      </p>
+                    </>
+                  )}
+                  {props.children[0].lastIndexOf('-') === -1 && (
+                    <>
+                      <h2 className='italic text-right text-blue-darkest leading-normal break-words'>
+                        {props.children[0]}
+                      </h2>
+                      <p className='text-right pt-2 pr-6 text-gray-400'>
+                        - anonymous
+                      </p>
+                    </>
                   )}
                 </div>
               )

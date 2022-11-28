@@ -1,4 +1,4 @@
-import type { NextPage } from 'next';
+import type { GetStaticProps } from 'next';
 import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -46,7 +46,7 @@ export default function Home({ posts }: Props) {
           return (
             <Link key={post._id} href={`/post/${post.slug.current}`}>
               <a className='h-full'>
-                <div className='group cursor-pointer border rounded-lg overflow-hidden shadow-lg h-full dark:border-gray-600 dark:shadow-gray-700'>
+                <div className='group cursor-pointer border rounded-lg overflow-hidden shadow-lg h-full dark:bg-gray-900 dark:border-gray-600 dark:shadow-gray-700'>
                   <div className='h-60 w-full relative'>
                     <Image className='object-cover group-hover:scale-105 transition-transform duration-200 ease-in-out' src={urlFor(post.mainImage).url()!} layout='fill' />
                   </div>
@@ -70,7 +70,7 @@ export default function Home({ posts }: Props) {
   );
 }
 
-export const getServerSideProps = async () => {
+export const getStaticProps: GetStaticProps = async () => {
   const query = `
   *[_type == "post"] | order(_createdAt desc){
     _id,
@@ -89,6 +89,7 @@ export const getServerSideProps = async () => {
   return {
     props: {
       posts,
-    }
+    },
+    revalidate: 3600,
   };
 };
