@@ -24,7 +24,7 @@ function Header() {
   return (
     <header className='flex justify-between p-5 max-w-7xl mx-auto'>
 
-      <div className='flex items-center space-x-5'>
+      <div className='flex items-center'>
         <Link href='/' passHref>
           <a>
             <img
@@ -39,17 +39,15 @@ function Header() {
             />
           </a>
         </Link>
-        <div className='hidden md:inline-flex items-center space-x-5'>
-          <h3>About</h3>
-          <h3>Contact</h3>
-          <h3 className='text-white bg-green-600 px-4 py-1 rounded-full'>Follow</h3>
-        </div>
+        <h3 className='text-white bg-blue-600 ml-1 md:ml-4 px-4 py-1 rounded-full'>
+          <Link href='/media' passHref><a>Media</a></Link>
+        </h3>
       </div>
 
-      <div className='flex flex-row justify-center items-center space-x-5 text-green-600'>
+      <div className='flex flex-row justify-center items-center text-green-600'>
         <Link href='/sub-to-email' passHref>
           <a>
-            <h3 className='border px-2 md:px-4 py-1 rounded-full border-green-600 mx-auto: hover:bg-green-600 hover:text-white text-center'>Subscribe with email</h3>
+            <h3 className='border mr-1 md:mr-4 px-2 md:px-4 py-1 rounded-full border-green-600  hover:bg-green-600 hover:text-white text-center'>Subscribe with email</h3>
           </a>
         </Link>
         {renderThemeChanger()}

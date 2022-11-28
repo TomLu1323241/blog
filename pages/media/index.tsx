@@ -5,6 +5,7 @@ import { ImageCategory, ImageCategoryRes, Media, Slug } from '../../shared/typin
 import { SubmitHandler, useForm } from 'react-hook-form';
 import ReactSwitch from 'react-switch';
 import { useState } from 'react';
+import Header from '../../components/header';
 
 interface Props {
   pageInfo: { title: string, slug: Slug }[]
@@ -38,37 +39,40 @@ export default function Archives(props: Props) {
     }
   };
   return <>
-    <h1 className='text-3xl truncate mx-auto'>This is the archives page</h1>
-    {pageInfo.map((item, index) => {
-      return <div className='py-4 md:py-2' key={`${index}-div`}>
-        <Link passHref href={`/media/${item.slug.current}`}>
-          <a className='text-4xl md:text-2xl text-blue-500 underline'>{item.title}</a>
-        </Link>
-      </div>;
-    })}
-    <form className='flex flex-col md:flex-row gap-y-3 gap-x-0 md:gap-x-3 justify-left items-center py-8 md:mx-12' onSubmit={handCategory(onSubmitCategory)}>
-      <input
-        {...regCategory('title')}
-        placeholder={'Hu Tao'}
-        className='shadow border rounded px-2 md:px-4 py-2 mx-8 w-fill md:w-96 ring-yellow-500 outline-none focus:ring md:mx-0'
-      />
-      <div className='flex flow-row gap-x-3'>
-        <p className='italic text-yellow-400'>NSFW</p>
-        <ReactSwitch
-          checked={NSFW}
-          onChange={(state) => {
-            setNSFW(state);
-          }}
-          onColor='#facc15'
+    <div className='max-w-7xl mx-auto' >
+      <Header />
+      <h1 className='text-3xl truncate mx-auto'>This is the archives page</h1>
+      {pageInfo.map((item, index) => {
+        return <div className='py-4 md:py-2' key={`${index}-div`}>
+          <Link passHref href={`/media/${item.slug.current}`}>
+            <a className='text-4xl md:text-2xl text-blue-500 underline'>{item.title}</a>
+          </Link>
+        </div>;
+      })}
+      <form className='flex flex-col md:flex-row gap-y-3 gap-x-0 md:gap-x-3 justify-left items-center py-8 md:mx-12' onSubmit={handCategory(onSubmitCategory)}>
+        <input
+          {...regCategory('title')}
+          placeholder={'Hu Tao'}
+          className='shadow border rounded px-2 md:px-4 py-2 mx-8 w-fill md:w-96 ring-yellow-500 outline-none focus:ring md:mx-0'
         />
-      </div>
-      <button
-        type='submit'
-        className='shadow bg-yellow-500 hover:bg-yellow-400 focus:shadow-outline focus:outline-none text-white font-bold px-4 py-2 rounded cursor-pointer w-fit'
-      >
-        Add Media Category
-      </button>
-    </form>
+        <div className='flex flow-row gap-x-3'>
+          <p className='italic text-yellow-400'>NSFW</p>
+          <ReactSwitch
+            checked={NSFW}
+            onChange={(state) => {
+              setNSFW(state);
+            }}
+            onColor='#facc15'
+          />
+        </div>
+        <button
+          type='submit'
+          className='shadow bg-yellow-500 hover:bg-yellow-400 focus:shadow-outline focus:outline-none text-white font-bold px-4 py-2 rounded cursor-pointer w-fit'
+        >
+          Add Media Category
+        </button>
+      </form>
+    </div>
   </>;
 }
 
