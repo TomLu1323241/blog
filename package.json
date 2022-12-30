@@ -12,9 +12,9 @@
     "@sanity/image-url": "^1.0.1",
     "@types/nodemailer": "^6.4.4",
     "@types/probe-image-size": "^7.2.0",
+    "discord-webhook-node": "^1.1.8",
     "get-image-colors": "^4.0.1",
     "next": "^12.3.1",
-    "discord-webhook-node": "^1.1.8",
     "next-sanity": "^0.5.2",
     "next-themes": "^0.2.0",
     "nodemailer": "^6.7.5",
@@ -25,9 +25,11 @@
     "react-hook-form": "^7.31.3",
     "react-infinite-scroll-component": "^6.1.0",
     "react-portable-text": "^0.4.3",
+    "react-simple-wheel-picker": "^1.2.0",
     "react-switch": "^7.0.0",
     "react-verification-input": "^2.0.6",
-    "sharp": "^0.31.2"
+    "sharp": "^0.31.2",
+    "styled-components": "^5.3.6"
   },
   "devDependencies": {
     "@types/get-image-colors": "^4.0.1",
