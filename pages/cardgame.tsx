@@ -91,7 +91,7 @@ function solution(nums: number[]): string[] {
 };
 
 export default function CardGame() {
-  const [nums, setNums] = useState<number[]>([0, 0, 0, 0, 0]);
+  const [nums, setNums] = useState<number[]>([1, 1, 1, 1, 1]);
   const [results, setResults] = useState<string[]>([]);
   const { systemTheme, theme } = useTheme();
   const [clientTheme, setClientTheme] = useState<string>('light');
