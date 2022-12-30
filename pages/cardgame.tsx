@@ -1,5 +1,5 @@
 import { useTheme } from 'next-themes';
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import WheelPicker, { PickerData } from 'react-simple-wheel-picker';
 import Header from '../components/header';
 
@@ -94,7 +94,10 @@ export default function CardGame() {
   const [nums, setNums] = useState<number[]>([0, 0, 0, 0, 0]);
   const [results, setResults] = useState<string[]>([]);
   const { systemTheme, theme } = useTheme();
-  const currentTheme = theme === 'system' ? systemTheme : theme;
+  const [clientTheme, setClientTheme] = useState<string>('light');
+  useEffect(() => {
+    setClientTheme((theme === 'system' ? systemTheme : theme) ?? 'light');
+  }, [theme, systemTheme]);
 
   // debounce
   const t = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -124,9 +127,9 @@ export default function CardGame() {
               width={100}
               itemHeight={30}
               selectedID={cards[0].id}
-              color={currentTheme === 'dark' ? '#bbb' : '#333'}
-              activeColor={currentTheme === 'dark' ? '#fff' : '#000'}
-              backgroundColor={currentTheme === 'dark' ? '#333' : '#fff'}
+              color={clientTheme === 'dark' ? '#bbb' : '#333'}
+              activeColor={clientTheme === 'dark' ? '#fff' : '#000'}
+              backgroundColor={clientTheme === 'dark' ? '#333' : '#fff'}
             />;
           })
         }
