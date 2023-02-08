@@ -8,7 +8,7 @@ async function getColor(url: string, mime: string): Promise<string[]> {
   const res = await fetch(url);
   const arrayBuffer = await res.arrayBuffer();
   const buffer = Buffer.from(arrayBuffer);
-  const smallerImageBuffer = await sharp(buffer).resize(50).toBuffer();
+  const smallerImageBuffer = await sharp(buffer).resize({ width: 50, kernel: 'nearest' }).toBuffer();
   // check out https://github.com/Vibrant-Colors/node-vibrant
   // @ts-ignore
   const colors: chroma.Color[] = await getColors(smallerImageBuffer, { type: mime, count: 1 });
