@@ -22,37 +22,39 @@ function Header() {
   };
 
   return (
-    <header className='flex justify-between p-5 max-w-7xl mx-auto'>
-
+    <header className='mx-auto flex max-w-7xl justify-between p-5'>
       <div className='flex items-center'>
         <Link href='/' passHref>
           <a>
             <img
-              className='w-44 object-contain cursor-pointer hidden md:inline-block dark:invert'
+              className='hidden w-44 cursor-pointer object-contain dark:invert md:inline-block'
               src='/logo long.png'
               alt=''
             />
             <img
-              className='h-12 object-contain cursor-pointer inline-block md:hidden dark:invert'
+              className='inline-block h-12 cursor-pointer object-contain dark:invert md:hidden'
               src='/logo.png'
               alt=''
             />
           </a>
         </Link>
-        <h3 className='text-white bg-blue-600 ml-1 md:ml-4 px-4 py-1 rounded-full'>
-          <Link href='/media' passHref><a>Media</a></Link>
+        <h3 className='ml-1 rounded-full bg-blue-600 px-4 py-1 text-white md:ml-4'>
+          <Link href='/media' passHref>
+            <a>Media</a>
+          </Link>
         </h3>
       </div>
 
-      <div className='flex flex-row justify-center items-center text-green-600'>
+      <div className='flex flex-row items-center justify-center text-green-600'>
         <Link href='/sub-to-email' passHref>
           <a>
-            <h3 className='border mr-1 md:mr-4 px-2 md:px-4 py-1 rounded-full border-green-600  hover:bg-green-600 hover:text-white text-center'>Subscribe with email</h3>
+            <h3 className='mr-1 rounded-full border border-green-600 px-2 py-1 text-center hover:bg-green-600  hover:text-white md:mr-4 md:px-4'>
+              Subscribe with email
+            </h3>
           </a>
         </Link>
         {renderThemeChanger()}
       </div>
-
     </header>
   );
 }

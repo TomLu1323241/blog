@@ -1,4 +1,4 @@
-import { GetServerSideProps, GetStaticPaths, GetStaticProps } from 'next';
+import { GetStaticPaths, GetStaticProps } from 'next';
 import Head from 'next/head';
 import React, { useState } from 'react';
 import Header from '../../components/header';
@@ -15,12 +15,12 @@ interface Props {
   title: string;
   archives: Media[];
   slug: string;
-  size: number
+  size: number;
 }
 
 export default function Archives({ title, archives, slug, size }: Props) {
   // Extra Large Size
-  const [sizeToggle, setSizeToggle] = useState<boolean>(false);
+  const [sizeToggle, setSizeToggle] = useState<boolean>(true);
 
   // load images
   const [images, setImages] = useState<Media[]>(archives);
@@ -31,7 +31,7 @@ export default function Archives({ title, archives, slug, size }: Props) {
     const res = await fetch(`/api/loadNewImages?slug=${slug}&index=${currentIndex}`);
     if (res.ok) {
       const resJson: Media[] = await res.json();
-      setImages(images => [...images, ...resJson]);
+      setImages((images) => [...images, ...resJson]);
       setCurrentIndex(currentIndex + FETCH_SIZE);
       if (linkArraySize <= currentIndex) {
         setHasMoreImages(false);
@@ -42,12 +42,7 @@ export default function Archives({ title, archives, slug, size }: Props) {
   };
 
   // add images
-  const {
-    register,
-    handleSubmit,
-    setValue,
-    reset,
-  } = useForm<LinkToAdd>();
+  const { register, handleSubmit, setValue, reset } = useForm<LinkToAdd>();
   const [submittingImage, setSubmittingImage] = useState<SubmittedProgress>(SubmittedProgress.NotSubmitted);
   const onSubmit: SubmitHandler<LinkToAdd> = async (data: LinkToAdd) => {
     if (submittingImage !== SubmittedProgress.NotSubmitted) {
@@ -61,7 +56,7 @@ export default function Archives({ title, archives, slug, size }: Props) {
     if (res.ok) {
       setSubmittingImage(SubmittedProgress.NotSubmitted);
       const newArchive: Media[] = await res.json();
-      setImages(images => [...newArchive, ...images]);
+      setImages((images) => [...newArchive, ...images]);
       setCurrentIndex(currentIndex + 1);
       reset({ link: '' });
       setLinkArraySize(linkArraySize + 1);
@@ -72,101 +67,105 @@ export default function Archives({ title, archives, slug, size }: Props) {
     }
   };
   setValue('slug', slug);
-  return <>
-    <Head>
-      <title>{title}</title>
-    </Head>
-    <div className='max-w-7xl mx-auto' >
-      <Header />
-      <div className='flex justify-between items-start md:items-center bg-yellow-400 py-10 md:py-0'>
-        <div className='px-10 space-y-5'>
-          <h1 className='text-6xl max-w-xl font-serif'>
-            {title}
-          </h1>
-          <h2>
-            Some details about {title} - {linkArraySize}
-          </h2>
-        </div>
-        <div className='flex flex-col'>
-          <div className='ml-auto md:pr-5 md:flex flex-col md:flex-row md:gap-x-4 font-bold font-mono md:pt-4 items-center hidden md:visible'>
-            <p className='text-lg'>Large View</p>
-            <ReactSwitch
-              checked={sizeToggle}
-              onChange={(state) => setSizeToggle(state)}
-              onColor='#86d3ff'
-              onHandleColor='#2693e6'
-              handleDiameter={30}
-              uncheckedIcon={false}
-              checkedIcon={false}
-              boxShadow='0px 1px 5px rgba(0, 0, 0, 0.6)'
-              activeBoxShadow='0px 0px 1px 10px rgba(0, 0, 0, 0.2)'
-              height={20}
-              width={48}
-            ></ReactSwitch>
+  return (
+    <>
+      <Head>
+        <title>{title}</title>
+      </Head>
+      <div className='mx-auto max-w-7xl'>
+        <Header />
+        <div className='flex items-start justify-between bg-yellow-400 py-10 md:items-center md:py-0'>
+          <div className='space-y-5 px-10'>
+            <h1 className='max-w-xl font-serif text-6xl'>{title}</h1>
+            <h2>
+              Some details about {title} - {linkArraySize}
+            </h2>
           </div>
-          <img
-            className='hidden md:inline-flex h-52 lg:h-72 pr-5'
-            src='/T.png'
-            alt=''
+          <div className='flex flex-col'>
+            <div className='ml-auto hidden flex-col items-center font-mono font-bold md:visible md:flex md:flex-row md:gap-x-4 md:pr-5 md:pt-4'>
+              <p className='text-lg'>Large View</p>
+              <ReactSwitch
+                checked={sizeToggle}
+                onChange={(state) => setSizeToggle(state)}
+                onColor='#86d3ff'
+                onHandleColor='#2693e6'
+                handleDiameter={30}
+                uncheckedIcon={false}
+                checkedIcon={false}
+                boxShadow='0px 1px 5px rgba(0, 0, 0, 0.6)'
+                activeBoxShadow='0px 0px 1px 10px rgba(0, 0, 0, 0.2)'
+                height={20}
+                width={48}
+              ></ReactSwitch>
+            </div>
+            <img className='hidden h-52 pr-5 md:inline-flex lg:h-72' src='/T.png' alt='' />
+          </div>
+        </div>
+        <form
+          className='flex flex-col justify-evenly gap-y-3 bg-yellow-400 py-2 md:flex-row'
+          onSubmit={handleSubmit(onSubmit)}
+        >
+          <input
+            {...register('link')}
+            placeholder='https://www.reddit.com/r/HuTao_Mains/comments/vbym4y/hu_tao_plays_guitar_now/'
+            className='w-fill mx-8 rounded border px-4 py-2 shadow outline-none ring-yellow-500 focus:ring md:mx-0 md:w-96'
           />
-        </div>
-      </div>
-      <form className='flex flex-col gap-y-3 md:flex-row justify-evenly bg-yellow-400 py-2' onSubmit={handleSubmit(onSubmit)}>
-        <input
-          {...register('link')}
-          placeholder='https://www.reddit.com/r/HuTao_Mains/comments/vbym4y/hu_tao_plays_guitar_now/'
-          className='shadow border rounded px-4 py-2 mx-8 w-fill md:w-96 ring-yellow-500 outline-none focus:ring md:mx-0' />
-        <div className='flex flex-row justify-evenly md:gap-12'>
-          {submittingImage === SubmittedProgress.NotSubmitted &&
+          <div className='flex flex-row justify-evenly md:gap-12'>
+            {submittingImage === SubmittedProgress.NotSubmitted && (
+              <button
+                type='submit'
+                className='focus:shadow-outline w-fit cursor-pointer rounded bg-yellow-500 px-4 py-2 font-bold text-white shadow hover:bg-yellow-400 focus:outline-none'
+              >
+                Add Link
+              </button>
+            )}
+            {submittingImage === SubmittedProgress.Submitting && (
+              <img className='h-12' src={LoadingGifs[Math.floor(Math.random() * LoadingGifs.length)]} />
+            )}
             <button
-              type='submit'
-              className='shadow bg-yellow-500 hover:bg-yellow-400 focus:shadow-outline focus:outline-none text-white font-bold px-4 py-2 rounded cursor-pointer w-fit'>
-              Add Link
+              className='focus:shadow-outline w-fit cursor-pointer rounded bg-yellow-500 px-4 py-2 font-bold text-white shadow hover:bg-yellow-400 focus:outline-none'
+              onClick={async (e) => {
+                e.preventDefault();
+                const text = await navigator.clipboard.readText();
+                setValue('link', text);
+              }}
+            >
+              Paste Clipboard
             </button>
-          }
-          {submittingImage === SubmittedProgress.Submitting &&
-            <img className='h-12' src={LoadingGifs[Math.floor(Math.random() * LoadingGifs.length)]} />
-          }
-          <button
-            className='shadow bg-yellow-500 hover:bg-yellow-400 focus:shadow-outline focus:outline-none text-white font-bold px-4 py-2 rounded cursor-pointer w-fit'
-            onClick={async (e) => {
-              e.preventDefault();
-              const text = await navigator.clipboard.readText();
-              setValue('link', text);
-            }}>
-            Paste Clipboard
-          </button>
-        </div>
-      </form>
-    </div>
-    <InfiniteScroll
-      dataLength={images.length}
-      next={loadMoreImages}
-      loader={<img className='h-96 mx-auto hover:scale-125' src='/loading-circles.gif' />}
-      hasMore={hasMoreImages}
-      className={`flex flex-wrap gap-4 ${sizeToggle ? 'mx-4' : 'mx-auto max-w-7xl'} justify-between`}
-      style={{ overflow: `clip visible` }}
-    >
-      {images.map((item: Media, index: number) => {
-        const multiplier = 384 / item.height;
-        return <>
-          <div
-            className='mx-auto md:mx-0 p-12 shadow-inner-md rounded-xl overflow-hidden'
-            style={{ backgroundColor: item.colors[0] }}
-            key={`${item.mediaSrc}-${index}`}
-          >
-            <img
-              height={item.height * multiplier}
-              width={item.width * multiplier}
-              className='hover:scale-125 transition-transform duration-200 ease-in-out shadow-3xl'
-              src={item.mediaSrc}
-              loading='lazy'
-            />
           </div>
-        </>;
-      })}
-    </InfiniteScroll>
-  </>;
+        </form>
+      </div>
+      <InfiniteScroll
+        dataLength={images.length}
+        next={loadMoreImages}
+        loader={<img className='mx-auto h-96 hover:scale-125' src='/loading-circles.gif' />}
+        hasMore={hasMoreImages}
+        className={`flex flex-wrap gap-4 ${sizeToggle ? 'mx-4' : 'mx-auto max-w-7xl'} justify-between`}
+        style={{ overflow: `clip visible` }}
+      >
+        {images.map((item: Media, index: number) => {
+          const multiplier = 384 / item.height;
+          return (
+            <>
+              <div
+                className='mx-auto overflow-hidden rounded-xl p-12 shadow-inner-md md:mx-0'
+                style={{ backgroundColor: item.colors[0] }}
+                key={`${item.mediaSrc}-${index}`}
+              >
+                <img
+                  height={item.height * multiplier}
+                  width={item.width * multiplier}
+                  className='shadow-3xl transition-transform duration-200 ease-in-out hover:scale-125'
+                  src={item.mediaSrc}
+                  loading='lazy'
+                />
+              </div>
+            </>
+          );
+        })}
+      </InfiniteScroll>
+    </>
+  );
 }
 
 export const getStaticPaths: GetStaticPaths = async () => {
@@ -183,7 +182,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
   const paths = imageTypes.map((images: any) => ({
     params: {
       slug: images.slug.current,
-    }
+    },
   }));
 
   return {
