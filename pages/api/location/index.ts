@@ -5,6 +5,7 @@ import { unlinkSync } from 'fs';
 import { LocationForm } from '../../../shared/location';
 import { getDistance } from 'geolib';
 import sharp from 'sharp';
+import { tall } from 'tall';
 
 export const config = {
   api: {
@@ -48,7 +49,7 @@ async function POST(req: NextApiRequest, res: NextApiResponse) {
         _ref: imageAsset._id,
       },
     },
-    googleMapsUrl: fields.googleMapsUrl,
+    googleMapsUrl: await tall(fields.googleMapsUrl),
     region: fields.region,
     visited: false,
   });

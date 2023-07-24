@@ -1,8 +1,10 @@
 import { useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { LocationForm } from '../shared/location';
+import { Api } from '../shared/api';
 import { ClipboardCheckIcon } from '@heroicons/react/outline';
 import { toast } from 'react-toastify';
+import { revalidate } from '../client-services/revalidate';
 
 interface UploadLocationProps {
   onSummitStart?: (location: LocationForm) => void;
@@ -19,7 +21,7 @@ export default function UploadLocation({ onSummitStart, onSummitEnd }: UploadLoc
     let text = await navigator.clipboard.readText();
     if (text.includes('goo.gl/maps')) {
       text = await (
-        await fetch('/api/location/unshorten', {
+        await fetch(`/${Api.api}/${Api.location}/${Api.unshorten}`, {
           headers: {
             'Content-Type': 'application/json',
           },
@@ -47,7 +49,7 @@ export default function UploadLocation({ onSummitStart, onSummitEnd }: UploadLoc
         type: imageBlob.type,
       });
       setFile(file);
-      toast('go your image');
+      toast('got your image');
     }
   };
 
@@ -68,7 +70,7 @@ export default function UploadLocation({ onSummitStart, onSummitEnd }: UploadLoc
       formData.append(key, value as string | Blob);
     }
 
-    const res = await fetch('api/location', {
+    const res = await fetch(`${Api.api}/${Api.location}`, {
       method: 'POST',
       body: formData,
     });
@@ -76,6 +78,7 @@ export default function UploadLocation({ onSummitStart, onSummitEnd }: UploadLoc
       toast('saved!', { type: 'success' });
       setFile(undefined);
       reset();
+      revalidate(`${Api.location}`);
     }
   };
 

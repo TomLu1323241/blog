@@ -10,6 +10,8 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { SubmittedProgress } from '../../shared/enums';
 import { FETCH_SIZE, LoadingGifs } from '../../shared/consts';
 import ReactSwitch from 'react-switch';
+import { revalidate } from '../../client-services/revalidate';
+import { Api } from '../../shared/api';
 
 interface Props {
   title: string;
@@ -60,7 +62,7 @@ export default function Archives({ title, archives, slug, size }: Props) {
       setCurrentIndex(currentIndex + 1);
       reset({ link: '' });
       setLinkArraySize(linkArraySize + 1);
-      await fetch(`/api/revalidate?path=/media/${slug}`);
+      await revalidate(`${Api.media}/${slug}`);
     } else {
       setSubmittingImage(SubmittedProgress.NotSubmitted);
       // Some kinda error for the user

@@ -28,6 +28,7 @@ export default function Locations({ _locations }: { _locations: LocationForm[] }
           { enableHighAccuracy: true }
         );
       }));
+      console.log({ long, lat });
       const res = await fetch('api/location?' + new URLSearchParams({ long, lat }), { method: 'GET' });
       const body: LocationForm[] = await res.json();
       setLocations(body);
