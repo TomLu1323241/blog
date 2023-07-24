@@ -37,18 +37,22 @@ export default function LocationCard({ location, googleMapsUrl, region, preNotes
           <div className={hasPostVisit ? 'w-1/2' : ''}>
             <h2 className='text-xl'>Pre-visit notes</h2>
             <ul className='list-inside list-disc'>
-              {preNotes?.split('\n').map((note, index) => (
-                <li key={index}>{note}</li>
-              ))}
+              {preNotes?.split('\n').map((note, index) => {
+                if (note.trim() !== '') {
+                  return <li key={index}>{note}</li>;
+                }
+              })}
             </ul>
           </div>
           {hasPostVisit && (
             <div className='w-1/2'>
               <h2 className='text-xl'>Post-visit notes</h2>
               <ul className='list-inside list-disc'>
-                {postNotes?.split('\n').map((note, index) => (
-                  <li key={index}>{note}</li>
-                ))}
+                {postNotes?.split('\n').map((note, index) => {
+                  if (note.trim() !== '') {
+                    return <li key={index}>{note}</li>;
+                  }
+                })}
               </ul>
             </div>
           )}
