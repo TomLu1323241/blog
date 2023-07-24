@@ -62,7 +62,7 @@ export default function Archives({ title, archives, slug, size }: Props) {
       setCurrentIndex(currentIndex + 1);
       reset({ link: '' });
       setLinkArraySize(linkArraySize + 1);
-      await revalidate(`${Api.media}/${slug}`);
+      await revalidate(`/${Api.media}/${slug}`);
     } else {
       setSubmittingImage(SubmittedProgress.NotSubmitted);
       // Some kinda error for the user

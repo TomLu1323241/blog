@@ -78,7 +78,7 @@ export default function UploadLocation({ onSummitStart, onSummitEnd }: UploadLoc
       toast('saved!', { type: 'success' });
       setFile(undefined);
       reset();
-      revalidate(`${Api.location}`);
+      revalidate(`/${Api.location}`);
     }
   };
 
