@@ -1,10 +1,7 @@
 {
   "extends": "next/core-web-vitals",
   "rules": {
-    "semi": [
-      2,
-      "always"
-    ],
+    "semi": [2, "always"],
     "@next/next/no-img-element": "off",
     "react/no-unescaped-entities": "off",
     "jsx-a11y/alt-text": "off",
@@ -15,9 +12,6 @@
         "allowTemplateLiterals": true
       }
     ],
-    "jsx-quotes": [
-      "error",
-      "prefer-single"
-    ]
+    "jsx-quotes": ["error", "prefer-single"]
   }
 }
